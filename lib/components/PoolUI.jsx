@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { ethers } from 'ethers'
+import { ethers, BigNumber } from 'ethers'
 import { useRouter } from 'next/router'
 
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
@@ -39,7 +39,7 @@ export const PoolUI = (
   const provider = walletContext.state.provider
   const usersAddress = walletContext._onboard.getState().address
 
-  const [ethBalance, setEthBalance] = useState(ethers.utils.bigNumberify(0))
+  const [ethBalance, setEthBalance] = useState(BigNumber.from(0))
   const [poolAddresses, setPoolAddresses] = useState({
     prizePool
   })
@@ -51,15 +51,19 @@ export const PoolUI = (
 
   const [usersChainValues, setUsersChainValues] = useState({
     loading: true,
-    usersTicketBalance: ethers.utils.bigNumberify(0),
-    usersTokenAllowance: ethers.utils.bigNumberify(0),
-    usersTokenBalance: ethers.utils.bigNumberify(0),
+    usersTicketBalance: BigNumber.from(0),
+    usersTokenAllowance: BigNumber.from(0),
+    usersTokenBalance: BigNumber.from(0),
   })
 
   try {
     ethers.utils.getAddress(prizePool)
   } catch (e) {
-    return 'Incorrectly formatted Ethereum address!'
+    return <div
+      className='text-center text-xl'
+    >
+      Incorrectly formatted Ethereum address!
+    </div>
   }
 
 
@@ -88,7 +92,7 @@ export const PoolUI = (
   useEffect(() => {
     const balance = walletContext.state.onboard.getState().balance
     if (balance) {
-      setEthBalance(ethers.utils.bigNumberify(balance))
+      setEthBalance(BigNumber.from(balance))
     }
   }, [walletContext])
 

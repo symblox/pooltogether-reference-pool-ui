@@ -1,5 +1,5 @@
 import React from 'react'
-import { ethers } from 'ethers'
+import { BigNumber } from 'ethers'
 
 import { Button } from 'lib/components/Button'
 import { Input } from 'lib/components/Input'
@@ -41,7 +41,7 @@ export const WithdrawForm = (props) => {
   const poolIsLocked = genericChainValues.isRngRequested
   const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
 
-  let instantTotal = ethers.utils.bigNumberify(0)
+  let instantTotal = BigNumber.from(0)
   if (withdrawAmount && exitFee && withdrawType === 'instant') {
     instantTotal = ethers.utils.parseUnits(withdrawAmount, tokenDecimals).sub(exitFee)
   }

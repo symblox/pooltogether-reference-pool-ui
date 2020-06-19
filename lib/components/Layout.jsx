@@ -80,7 +80,7 @@ export const Layout = (props) => {
     <ToastContainer
       className='pool-toast'
       position='top-center'
-      autoClose={6000}
+      autoClose={60000}
       transition={Slide}
     />
   </>
