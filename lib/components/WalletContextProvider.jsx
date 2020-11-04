@@ -15,10 +15,11 @@ const PORTIS_KEY = process.env.NEXT_JS_PORTIS_API_KEY
 const SELECTED_WALLET_COOKIE_KEY = 'selectedWallet'
 
 // let networkName = 'mainnet'
-let networkName = 'rinkeby'
-const RPC_URL = (networkName && INFURA_KEY) ?
-  `https://${networkName}.infura.io/v3/${INFURA_KEY}` :
-  'http://localhost:8545'
+let networkName
+const RPC_URL =
+  networkName && INFURA_KEY
+    ? `https://${networkName}.infura.io/v3/${INFURA_KEY}`
+    : 'http://localhost:8545'
 
 let cookieOptions = { sameSite: 'strict' }
 if (process.env.NEXT_JS_DOMAIN_NAME) {
@@ -50,11 +51,6 @@ const WALLETS_CONFIG = [
     preferred: true
   },
   {
-    walletName: 'walletConnect',
-    infuraKey: INFURA_KEY,
-    preferred: true
-  },
-  {
     walletName: 'walletLink',
     rpcUrl: RPC_URL,
     preferred: true
@@ -70,40 +66,40 @@ const WALLETS_CONFIG = [
   },
   {
     walletName: 'portis',
-    apiKey: PORTIS_KEY,
+    apiKey: PORTIS_KEY
   },
   { walletName: 'authereum' },
   { walletName: 'dapper' },
   { walletName: 'status' },
-  { walletName: 'torus' },
+  { walletName: 'torus' }
 ]
 
 export const WalletContext = React.createContext()
 
 let _onboard
 
-const initializeOnboard = (setOnboardState) => {
+const initializeOnboard = setOnboardState => {
   _onboard = Onboard({
     hideBranding: true,
     networkId: nameToChainId(networkName),
     darkMode: true,
     walletSelect: {
-      wallets: WALLETS_CONFIG,
+      wallets: WALLETS_CONFIG
     },
     subscriptions: {
-      address: async (a) => {
+      address: async a => {
         debug('address change')
         debug(a)
         setAddress(setOnboardState)
       },
-      balance: async (balance) => {
+      balance: async balance => {
         setOnboardState(previousState => ({
           ...previousState,
           onboard: _onboard,
-          timestamp: Date.now(),
+          timestamp: Date.now()
         }))
       },
-      network: async (n) => {
+      network: async n => {
         debug('network change')
         debug('new network id', n)
         await _onboard.config({ networkId: n })
@@ -133,9 +129,9 @@ const doConnectWallet = async (walletType, setOnboardState) => {
   debug({ currentState })
 
   if (currentState.wallet.type) {
-    debug("run walletCheck")
+    debug('run walletCheck')
     await _onboard.walletCheck()
-    debug("walletCheck done")
+    debug('walletCheck done')
     debug({ currentState: _onboard.getState() })
 
     // trigger re-render
@@ -147,11 +143,7 @@ const doConnectWallet = async (walletType, setOnboardState) => {
 }
 
 const connectWallet = (w, setOnboardState) => {
-  Cookies.set(
-    SELECTED_WALLET_COOKIE_KEY,
-    w.name,
-    cookieOptions
-  )
+  Cookies.set(SELECTED_WALLET_COOKIE_KEY, w.name, cookieOptions)
 
   setOnboardState(previousState => ({
     ...previousState,
@@ -161,21 +153,18 @@ const connectWallet = (w, setOnboardState) => {
   }))
 }
 
-const disconnectWallet = (setOnboardState) => {
-  Cookies.remove(
-    SELECTED_WALLET_COOKIE_KEY,
-    cookieOptions
-  )
+const disconnectWallet = setOnboardState => {
+  Cookies.remove(SELECTED_WALLET_COOKIE_KEY, cookieOptions)
 
   setOnboardState(previousState => ({
     ...previousState,
     address: undefined,
     wallet: undefined,
-    provider: undefined,
+    provider: undefined
   }))
 }
 
-const onPageLoad = async (setOnboardState) => {
+const onPageLoad = async setOnboardState => {
   const previouslySelectedWallet = Cookies.get(SELECTED_WALLET_COOKIE_KEY)
 
   if (previouslySelectedWallet !== undefined) {
@@ -184,7 +173,7 @@ const onPageLoad = async (setOnboardState) => {
   }
 }
 
-const setAddress = (setOnboardState) => {
+const setAddress = setOnboardState => {
   debug('running setAddress')
   const currentState = _onboard.getState()
 
@@ -210,7 +199,7 @@ const setAddress = (setOnboardState) => {
   }
 }
 
-export const WalletContextProvider = (props) => {
+export const WalletContextProvider = props => {
   const [onboardState, setOnboardState] = useState()
 
   if (!onboardState) {
@@ -232,13 +221,15 @@ export const WalletContextProvider = (props) => {
 
   debug('re-render')
 
-  return <WalletContext.Provider
-    value={{
-      handleConnectWallet,
-      state: onboardState,
-      _onboard
-    }}
-  >
-    {props.children}
-  </WalletContext.Provider>
+  return (
+    <WalletContext.Provider
+      value={{
+        handleConnectWallet,
+        state: onboardState,
+        _onboard
+      }}
+    >
+      {props.children}
+    </WalletContext.Provider>
+  )
 }
