@@ -32,17 +32,78 @@ const handleDepositSubmit = async (
     ticketAddress,
     referrer,
     {
-      gasLimit: 800000
+      gasLimit: 800000,
+      value: ethers.utils.parseUnits(depositAmount, decimals),
     }
   ]
 
-
+CompoundPrizePoolAbi.push({
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "controlledToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "referrer",
+        "type": "address"
+      }
+    ],
+    "name": "depositVlxTo",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },{
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "controlledToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maximumExitFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawVlxInstantlyFrom",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  })
   await sendTx(
     setTx,
     provider,
     contractAddress,
     CompoundPrizePoolAbi,
-    'depositTo',
+    'depositVlxTo',
     params,
     'Deposit',
   )
