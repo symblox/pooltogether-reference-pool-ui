@@ -143,6 +143,14 @@ export const IndexContent = (
                   label: 'Mainnet'
                 },
                 {
+                  value: 'vlxmain',
+                  label: 'Vlx'
+                },
+                {
+                  value: 'vlxtest',
+                  label: 'Vlx testnet'
+                },
+                {
                   value: 'local',
                   label: 'Local'
                 }

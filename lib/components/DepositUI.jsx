@@ -64,40 +64,8 @@ CompoundPrizePoolAbi.push({
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
-  },{
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "controlledToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "maximumExitFee",
-        "type": "uint256"
-      }
-    ],
-    "name": "withdrawVlxInstantlyFrom",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "payable",
-    "type": "function"
   })
+
   await sendTx(
     setTx,
     provider,
