@@ -24,6 +24,10 @@ export const PoolStats = (props) => {
     ticketCreditLimitMantissa,
     sponsorshipName,
     sponsorshipSymbol,
+    externalErc20Name,
+    externalErc20Symbol,
+    externalErc20Decimals,
+    externalErc20Reward,
     maxExitFeeMantissa,
   } = genericChainValues
 
@@ -159,12 +163,16 @@ export const PoolStats = (props) => {
         {
           icon: null,
           title: <>
-            Sponsorship Symbol &amp; Name
+            External Reward Erc20 Symbol &amp; Name &amp; Reward
           </>,
           content: <>
             <h5>
-              ${sponsorshipSymbol}
-              <br /><span className='text-blue'>{sponsorshipName}</span>
+              ${externalErc20Symbol}
+              <br /><span className='text-blue'>{externalErc20Name}</span>
+              <br /><span >{displayAmountInEther(
+                externalErc20Reward[0],
+                { precision: 2, decimals: externalErc20Decimals }
+              )}</span>
             </h5>
           </>
         },

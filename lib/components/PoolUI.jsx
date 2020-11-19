@@ -67,7 +67,7 @@ export const PoolUI = props => {
       setGenericChainValues,
       setUsersChainValues,
     )
-  }, 5000)
+  }, 10000)
 
   useEffect(() => {
     console.log({ poolAddresses })
