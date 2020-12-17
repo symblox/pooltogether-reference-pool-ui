@@ -8,9 +8,9 @@ export const StatsUI = (props) => {
     <PoolStats
       {...props}
     />
-    <PoolRelatedAddressesUI
+    {/* <PoolRelatedAddressesUI
       {...props}
-    />
+    /> */}
   </>
 }
 

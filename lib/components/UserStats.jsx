@@ -37,19 +37,19 @@ export const UserStats = (props) => {
         <BlueLineStat
           title={`Your balance`}
           value={<>
-            {displayAmountInEther(usersTokenBalance, { precision: 2, decimals })}&nbsp;<span className='text-default-soft opacity-60'> {tokenSymbol || 'TOKEN'}</span>
+            {displayAmountInEther(usersTokenBalance, { precision: 2, decimals })}&nbsp;<span className='text-default-soft opacity-60'> VLX</span>
           </>}
         />
       </StatContainer>
 
-      <StatContainer>
+      {/* <StatContainer>
         <BlueLineStat
           title={`Allowance`}
           value={<>
             {displayAmountInEther(usersTokenAllowance, { precision: 0, decimals })}&nbsp;<span className='text-default-soft opacity-60'>{tokenSymbol || 'TOKEN'}</span>
           </>}
         />
-      </StatContainer>
+      </StatContainer> */}
 
       <StatContainer>
         <BlueLineStat

@@ -22,7 +22,7 @@ export const SweepTimelockedForm = (props) => {
   const fundsReadyInSeconds = (usersTimelockBalanceAvailableAt - now)
   const buttonDisabled = fundsReadyInSeconds > 0
 
-  const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
+  const tokenSymbol = 'VLX' //genericChainValues.tokenSymbol || 'TOKEN'
 
   return <>
     <form

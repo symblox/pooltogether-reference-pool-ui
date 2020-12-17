@@ -35,16 +35,6 @@ export const InteractUI = (
     <div
       className='relative py-4 sm:py-6 text-center'
     >
-      {usersAddress && <>
-        <div className='my-4 p-10 bg-card rounded-lg mb-10'>
-          <StartAwardUI
-            {...props}
-          />
-          <CompleteAwardUI
-            {...props}
-          />
-        </div>
-      </>}
 
       {ethBalance && ethBalance.eq(0) && <>
         <FormLockedOverlay
@@ -93,6 +83,18 @@ export const InteractUI = (
         poolAddresses={poolAddresses}
         usersChainValues={usersChainValues}
       />
+
+      {usersAddress && <>
+        <div className='my-4 p-10 bg-card rounded-lg mb-10'>
+          <StartAwardUI
+            {...props}
+          />
+          <CompleteAwardUI
+            {...props}
+          />
+        </div>
+      </>}
+
     </div>
   </>
 }

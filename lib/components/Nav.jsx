@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WalletInfo } from 'lib/components/WalletInfo'
 
-import PoolLogo from 'assets/images/pooltogether-white-wordmark.svg'
+import PoolLogo from 'assets/images/symblox-logo.svg'
 
 export const Nav = (props) => {
   const walletContext = useContext(WalletContext)
@@ -35,7 +35,7 @@ export const Nav = (props) => {
               <img
                 alt={`PoolTogether Logo`}
                 src={PoolLogo}
-                className='mr-auto lg:m-0 w-16 sm:w-16'
+                className='mr-auto lg:m-0 w-32 sm:w-32'
               />
             </a>
           </Link>

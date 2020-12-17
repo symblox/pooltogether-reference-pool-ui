@@ -50,7 +50,7 @@ export const WithdrawForm = (props) => {
   } = genericChainValues || {}
 
   const poolIsLocked = isRngRequested
-  const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
+  const tokenSymbol = 'VLX' //genericChainValues.tokenSymbol || 'TOKEN'
   const ticketSymbol = genericChainValues.ticketSymbol || 'TICK'
 
   let instantTotal = ethers.utils.bigNumberify(0)

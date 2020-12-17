@@ -24,6 +24,7 @@ import UsdcSvg from 'assets/images/usdc-new-transparent.png'
 import UsdtSvg from 'assets/images/usdt-new-transparent.png'
 import WbtcSvg from 'assets/images/wbtc-new-transparent.png'
 import ZrxSvg from 'assets/images/zrx-new-transparent.png'
+import VlxSvg from 'assets/images/vlx-new-transparent.png'
 
 const renderErrorMessage = (address, type, message) => {
   const errorMsg = `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network or your IP is being rate-limited?)`
@@ -158,12 +159,14 @@ export const PoolUI = props => {
     walletContext.handleConnectWallet()
   }
 
-  const tokenSymbol = genericChainValues.tokenSymbol
+  const tokenSymbol = 'VLX' //genericChainValues.tokenSymbol
 
-  let tokenSvg = DaiSvg
+  let tokenSvg = VlxSvg
   if (tokenSymbol === 'BAT') {
     tokenSvg = BatSvg
-  } else if (tokenSymbol === 'USDC') {
+  } else if (tokenSymbol === 'DAI') {
+    tokenSvg = DaiSvg
+  }  else if (tokenSymbol === 'USDC') {
     tokenSvg = UsdcSvg
   } else if (tokenSymbol === 'USDT') {
     tokenSvg = UsdtSvg
@@ -191,7 +194,7 @@ export const PoolUI = props => {
               className="inline-block w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mb-2"
             />
 
-            <div className="mb-6">
+            {/* <div className="mb-6">
               Prize Pool contract address:
               <br />{' '}
               <EtherscanAddressLink
@@ -200,7 +203,7 @@ export const PoolUI = props => {
               >
                 {poolAddresses.prizePool}
               </EtherscanAddressLink>
-            </div>
+            </div> */}
           </div>
 
           <div className="mt-8">
@@ -219,13 +222,13 @@ export const PoolUI = props => {
               >
                 Interact
               </Tab>
-              <Tab
+              {/* <Tab
                 changeHash={changeHash}
                 selected={isSelected === '#admin'}
                 hash="#admin"
               >
                 Admin
-              </Tab>
+              </Tab> */}
             </Tabs>
 
             <Content>
@@ -246,12 +249,12 @@ export const PoolUI = props => {
                 />
               </ContentPane>
 
-              <ContentPane isSelected={isSelected === '#admin'}>
+              {/* <ContentPane isSelected={isSelected === '#admin'}>
                 <AdminUI
                   genericChainValues={genericChainValues}
                   poolAddresses={poolAddresses}
                 />
-              </ContentPane>
+              </ContentPane> */}
             </Content>
           </div>
           {/* 

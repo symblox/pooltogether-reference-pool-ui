@@ -23,7 +23,7 @@ export const Layout = (props) => {
         minHeight: '100vh'
       }}
     >
-      <StaticNetworkNotificationBanner />
+      {/* <StaticNetworkNotificationBanner /> */}
 
       <div
         className='pool-container flex flex-grow relative z-30 h-full page fadeIn animated'
@@ -57,22 +57,10 @@ export const Layout = (props) => {
                 <div
                   className='text-default title text-base sm:text-xl'
                 >
-                  PoolTogether - Reference Frontend
-                </div>
-                <div
-                  className='text-primary-soft title text-xs sm:text-lg'
-                >
-                  v{packageJson.version}
+                  Pooled VELAS (pVLX)
                 </div>
                 {/* <img src={PoolIcon} className='inline-block w-6 h-6 sm:w-10 sm:h-10 ml-2 mb-2 sm:mb-0' /> */}
               </div>
-
-              <a
-                href='https://docs.pooltogether.com'
-                className='trans text-xs sm:text-base'
-              >
-                View documentation
-              </a>
             </div>
 
             <div
@@ -87,7 +75,7 @@ export const Layout = (props) => {
           <div
             className='main-footer z-10'
           >
-            <Footer />
+            {/* <Footer /> */}
           </div>
         </div>
 

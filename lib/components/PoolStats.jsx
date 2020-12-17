@@ -32,7 +32,7 @@ export const PoolStats = (props) => {
   } = genericChainValues
 
   const tokenDecimals = genericChainValues.tokenDecimals || DEFAULT_TOKEN_PRECISION
-  const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
+  const tokenSymbol = 'VLX' //genericChainValues.tokenSymbol || 'TOKEN'
 
   const [mountedAt, setMountedAt] = useState(0)
   const [secondsToPrizeAtMount, setSecondsToPrizeAtMount] = useState(0)
@@ -74,42 +74,6 @@ export const PoolStats = (props) => {
         {
           icon: null,
           title: <>
-            next prize (estimate)
-          </>,
-          content: <>
-            <h3>
-              {displayAmountInEther(
-                prizeEstimate,
-                { precision: 2, decimals: tokenDecimals }
-              )} {tokenSymbol}
-            </h3>
-          </>
-        },
-        {
-          icon: null,
-          title: <>
-            Seconds until rewardable
-          </>,
-          content: <>
-            <h3>
-              {secondsRemainingNow}
-            </h3>
-          </>
-        },
-        {
-          icon: null,
-          title: <>
-            Decimal precision
-          </>,
-          content: <>
-            <h3>
-              {tokenDecimals}
-            </h3>
-          </>
-        },
-        {
-          icon: null,
-          title: <>
             Total ticket supply
           </>,
           content: <>
@@ -126,15 +90,66 @@ export const PoolStats = (props) => {
         {
           icon: null,
           title: <>
-            Ticket Symbol &amp; Name
+            next prize (estimate)
           </>,
           content: <>
             <h5>
-              ${ticketSymbol}
-              <br /><span className='text-blue'>{ticketName}</span>
+              <span className='text-blue'>{externalErc20Name} ({externalErc20Symbol})</span>
+              <br /><span >{displayAmountInEther(
+                externalErc20Reward[0],
+                { precision: 2, decimals: externalErc20Decimals }
+              )}</span>
             </h5>
           </>
         },
+        // {
+        //   icon: null,
+        //   title: <>
+        //     next prize (estimate)
+        //   </>,
+        //   content: <>
+        //     <h3>
+        //       {displayAmountInEther(
+        //         prizeEstimate,
+        //         { precision: 2, decimals: tokenDecimals }
+        //       )} {tokenSymbol}
+        //     </h3>
+        //   </>
+        // },
+        {
+          icon: null,
+          title: <>
+            Seconds until rewardable
+          </>,
+          content: <>
+            <h3>
+              {secondsRemainingNow}
+            </h3>
+          </>
+        },
+        // {
+        //   icon: null,
+        //   title: <>
+        //     Decimal precision
+        //   </>,
+        //   content: <>
+        //     <h3>
+        //       {tokenDecimals}
+        //     </h3>
+        //   </>
+        // },
+        // {
+        //   icon: null,
+        //   title: <>
+        //     Ticket Symbol &amp; Name
+        //   </>,
+        //   content: <>
+        //     <h5>
+        //       ${ticketSymbol}
+        //       <br /><span className='text-blue'>{ticketName}</span>
+        //     </h5>
+        //   </>
+        // },
         {
           icon: null,
           title: <>
@@ -158,22 +173,6 @@ export const PoolStats = (props) => {
             <h3>
               {displayAmountInEther(ticketCreditLimitMantissa.mul(100), { precision: 2 })}%
             </h3>
-          </>
-        },
-        {
-          icon: null,
-          title: <>
-            External Reward Erc20 Symbol &amp; Name &amp; Reward
-          </>,
-          content: <>
-            <h5>
-              ${externalErc20Symbol}
-              <br /><span className='text-blue'>{externalErc20Name}</span>
-              <br /><span >{displayAmountInEther(
-                externalErc20Reward[0],
-                { precision: 2, decimals: externalErc20Decimals }
-              )}</span>
-            </h5>
           </>
         },
         {

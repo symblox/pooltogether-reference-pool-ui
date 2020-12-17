@@ -27,7 +27,7 @@ export const DepositForm = (props) => {
   } = genericChainValues || {}
 
   const poolIsLocked = isRngRequested
-  const tokenSymbol = genericChainValues.tokenSymbol || 'TOKEN'
+  const tokenSymbol = 'VLX' //genericChainValues.tokenSymbol || 'TOKEN'
 
 
   let depositAmount, setDepositAmount

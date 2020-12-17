@@ -1,13 +1,13 @@
 import Head from 'next/head'
 
 export const Meta = ({ title }) => {
-  const defaultTitle = 'PoolTogether - V3 Reference Pool Frontend'
+  const defaultTitle = 'Pooled VLX'
   title = title ? `${title} - ${defaultTitle}` : defaultTitle
 
-  const url = `https://reference-app.pooltogether.com`
+  const url = `https://symblox.io`
   const description = `Deposit and withdraw to V3 Pools`
-  const keywords = 'ethereum'
-  const twitterHandle = '@PoolTogether_'
+  const keywords = 'velas'
+  const twitterHandle = '@symbloxdefi'
 
   return (
     <>
@@ -24,8 +24,6 @@ export const Meta = ({ title }) => {
         <meta name='theme-color' content='#1a083a' />
         <meta name='description' content={description} />
         <meta name='keywords' content={keywords} />
-        <meta name='author' content='PoolTogether LLC' />
-        <meta name='copyright' content={`Copyright ${new Date().getFullYear()}`} />
 
         <meta property='og:title' content={title} />
         <meta property='og:description' content={description} />
