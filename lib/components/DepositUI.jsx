@@ -1,13 +1,17 @@
 import React, { useContext, useState } from 'react'
-import { ethers } from 'ethers'
-
 import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
+import { ethers } from 'ethers'
 
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
+import { useAtom } from 'jotai'
+import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
+import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
+import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
 
 const handleDepositSubmit = async (
   setTx,
@@ -16,11 +20,9 @@ const handleDepositSubmit = async (
   contractAddress,
   ticketAddress,
   depositAmount,
-  decimals
+  decimals,
 ) => {
-  if (
-    !depositAmount
-  ) {
+  if (!depositAmount) {
     poolToast.error(`Deposit Amount needs to be filled in`)
     return
   }
@@ -34,36 +36,36 @@ const handleDepositSubmit = async (
     {
       gasLimit: 800000,
       value: ethers.utils.parseUnits(depositAmount, decimals),
-    }
+    },
   ]
 
-CompoundPrizePoolAbi.push({
-    "inputs": [
+  CompoundPrizePoolAbi.push({
+    inputs: [
       {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
       },
       {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
       },
       {
-        "internalType": "address",
-        "name": "controlledToken",
-        "type": "address"
+        internalType: 'address',
+        name: 'controlledToken',
+        type: 'address',
       },
       {
-        "internalType": "address",
-        "name": "referrer",
-        "type": "address"
-      }
+        internalType: 'address',
+        name: 'referrer',
+        type: 'address',
+      },
     ],
-    "name": "depositVlxTo",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
+    name: 'depositVlxTo',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
   })
 
   await sendTx(
@@ -77,39 +79,74 @@ CompoundPrizePoolAbi.push({
   )
 }
 
-export const DepositUI = (props) => {
+export const DepositUI = props => {
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
-  const usersAddress = walletContext._onboard.getState().address
-  const ticketAddress = props.poolAddresses.ticket
+  const [usersAddress] = useAtom(usersAddressAtom)
+  const [poolAddresses] = useAtom(poolAddressesAtom)
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+
+  const ticketAddress = poolAddresses.ticket
+  const tokenSymbol = poolChainValues.tokenSymbol || 'TOKEN'
+  const ticketSymbol = poolChainValues.ticketSymbol || 'TOKEN'
+  const depositMessage = `You can deposit ${tokenSymbol} to be eligible to win the prizes in this pool. Once deposited you will receive ${ticketSymbol} and be entered to win until your ${tokenSymbol} is withdrawn.`
 
   const [depositAmount, setDepositAmount] = useState('')
 
-  const [tx, setTx] = useState({})
+  const [tx, setTx] = useState({
+    inWallet: false,
+    sent: false,
+    completed: false,
+  })
 
   const txInFlight = tx.inWallet || tx.sent
 
-  const resetState = (e) => {
+  const resetState = e => {
     e.preventDefault()
     setDepositAmount('')
-    setTx({})
+    setTx({
+      inWallet: false,
+      sent: false,
+      completed: false,
+    })
   }
 
-  return <>
-    {!txInFlight ? <>
+  if (!usersAddress) {
+    return <ConnectWalletButton />
+  }
+
+  if (txInFlight) {
+    return (
+      <>
+        <div className="mb-4 sm:mb-8 text-sm sm:text-base text-accent-1">
+          {depositMessage}
+        </div>
+        <TxMessage
+          txType="Deposit"
+          tx={tx}
+          handleReset={resetState}
+          resetButtonText="Deposit more"
+        />
+      </>
+    )
+  }
+
+  return (
+    <>
+      <div className="mb-4 sm:mb-8 text-sm sm:text-base text-accent-1">
+        {depositMessage}
+      </div>
       <DepositForm
-        {...props}
-        genericChainValues={props.genericChainValues}
-        handleSubmit={(e) => {
+        handleSubmit={e => {
           e.preventDefault()
           handleDepositSubmit(
             setTx,
             provider,
             usersAddress,
-            props.poolAddresses.prizePool,
+            poolAddresses.prizePool,
             ticketAddress,
             depositAmount,
-            props.genericChainValues.tokenDecimals
+            poolChainValues.tokenDecimals,
           )
         }}
         vars={{
@@ -119,13 +156,6 @@ export const DepositUI = (props) => {
           setDepositAmount,
         }}
       />
-    </> : <>
-      <TxMessage
-        txType='Deposit'
-        tx={tx}
-        handleReset={resetState}
-      />
-    </>}
-
-  </>
+    </>
+  )
 }

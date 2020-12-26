@@ -10,7 +10,9 @@
     "build": "next build && next export && yarn postexport",
     "start": "next start",
     "postexport": "node post-export.js",
-    "distrelease": "yarn build"
+    "distrelease": "yarn build",
+    "format": "yarn prettier --write .",
+    "check-format": "yarn prettier --check ."
   },
   "jest": {
     "collectCoverageFrom": [
@@ -32,28 +34,38 @@
     "@pooltogether/current-pool-data": "^3.0.1",
     "@pooltogether/etherplex": "^0.2.3",
     "@pooltogether/pooltogether-contracts": "^3.0.1",
+    "@reach/menu-button": "^0.11.2",
     "@reach/tooltip": "0.10.5",
     "autoprefixer": "^9.8.1",
+    "axios": "^0.21.0",
     "babel-jest": "^26.3.0",
+    "beautiful-react-hooks": "^0.31.0",
     "bn.js": "4.11.0",
     "classnames": "^2.2.6",
+    "date-fns": "^2.16.1",
     "ethers": "^4.0.47",
     "feather-icons-react": "^0.4.1",
     "jest": "^26.4.2",
+    "jotai": "^0.11.2",
     "js-cookie": "^2.2.1",
     "next": "9.4.4",
     "next-images": "^1.4.0",
     "postcss-easy-import": "^3.0.0",
     "react": "16.13.1",
+    "react-countup": "^4.3.3",
     "react-device-detect": "^1.13.1",
     "react-dom": "16.13.1",
+    "react-loader-spinner": "^3.1.14",
+    "react-query": "^2.26.4",
     "react-toastify": "^6.0.5",
     "request": "2.88.2",
     "rollup": "2.17.1",
+    "scheduler": "^0.20.1",
     "tailwindcss": "^1.7.6",
     "webpack": "4"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^9.4.4"
+    "@next/bundle-analyzer": "^9.4.4",
+    "prettier": "2.2.1"
   }
 }

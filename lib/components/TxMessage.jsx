@@ -1,137 +1,83 @@
 import React, { useContext } from 'react'
+import classnames from 'classnames'
+import Loader from 'react-loader-spinner'
+import FeatherIcon from 'feather-icons-react'
 
+import { Button } from 'lib/components/Button'
+import { InnerCard } from 'lib/components/Card'
 import { EtherscanTxLink } from 'lib/components/EtherscanTxLink'
-import { LoadingDots } from 'lib/components/LoadingDots'
-import { shorten } from 'lib/utils/shorten'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { shorten } from 'lib/utils/shorten'
 
 export const TxMessage = (props) => {
   const walletContext = useContext(WalletContext)
   const { _onboard } = walletContext || {}
   const chainId = _onboard.getState().appNetworkId
 
-  const {
-    tx,
-    txType,
-    resetButtonText,
-    handleReset,
-  } = props
+  const { tx, txType, resetButtonText, handleReset, className } = props
 
   const txInWallet = tx.inWallet && !tx.sent
   const txSent = tx.sent && !tx.completed
   const txCompleted = tx.completed
   const txError = tx.error
-  const txInFlight = (txInWallet || txSent || txCompleted)
+  const txInFlight = txInWallet || txSent || txCompleted
 
-  if (!tx) {
+  if (!tx || !txInFlight) {
     return null
   }
 
-  return <>
-    {txInFlight && <>
-      <div
-        className='bg-card rounded-lg px-2 sm:px-4 pt-5 pb-2 sm:py-6 text-center text-white text-xs sm:text-sm lg:text-base'
-      >
-        <div
-          className='font-bold rounded-full text-default-soft text-sm sm:text-base uppercase px-2 bg-purple-900'
-        >
-          Transaction status
+  return (
+    <InnerCard className={classnames('flex flex-col text-center', className)}>
+      {!txCompleted && !txError && (
+        <Loader type='Oval' height={65} width={65} color='#bbb2ce' className='mx-auto mb-4' />
+      )}
+
+      {txCompleted && !txError && (
+        <FeatherIcon
+          icon='check-circle'
+          className={'mx-auto stroke-1 w-3 h-3 sm:w-16 sm:h-16 stroke-current text-accent-1 mb-4'}
+        />
+      )}
+
+      {txCompleted && txError && (
+        <FeatherIcon
+          icon='x-circle'
+          className={'mx-auto stroke-1 w-3 h-3 sm:w-16 sm:h-16 stroke-current text-accent-1 mb-4'}
+        />
+      )}
+
+      <div className='text-accent-1 text-sm sm:text-base'>Transaction status:</div>
+
+      {txInWallet && !txError && (
+        <div className='text-accent-1 text-sm sm:text-base'>
+          Please confirm the transaction in your wallet ...
         </div>
+      )}
 
-        <div
-          className='mb-4 text-white text-lg sm:text-xl lg:text-2xl'
-        >
-          {txType}
+      {txSent && (
+        <div className='text-accent-1 text-sm sm:text-base'>Waiting for confirmations ...</div>
+      )}
+
+      {txCompleted && !txError && (
+        <div className='text-green-1 text-sm sm:text-base'>Transaction successful</div>
+      )}
+
+      {txError && <div className='text-red-1 text-sm sm:text-base'>Error with transaction</div>}
+
+      {tx.hash && (
+        <div className='text-accent-1 text-sm sm:text-base'>
+          Transaction hash:{' '}
+          <EtherscanTxLink chainId={chainId} hash={tx.hash} className='underline'>
+            {shorten(tx.hash)}
+          </EtherscanTxLink>
         </div>
+      )}
 
-        {txInWallet && <>
-          <div
-            className='mb-1 text-yellow text-base sm:text-lg lg:text-xl'
-          >
-            Please confirm the transaction in your wallet ...
-          </div>
-        </>}
-
-        {txSent && <>
-          <div className='mt-6'>
-            <LoadingDots />
-          </div>
-          <div
-            className='mb-1 text-yellow text-base sm:text-lg lg:text-xl'
-          >
-            Waiting for confirmations ...
-          </div>
-        </>}
-
-        {txCompleted && !txError && <>
-          <div
-            className='mb-1 text-green text-base sm:text-lg lg:text-xl'
-          >
-            Transaction successful!
-          </div>
-        </>}
-
-        {txError && <>
-          <div
-            className='mb-1 text-red-500 text-base sm:text-lg lg:text-xl'
-          >
-            There was an error with the transaction
-          </div>
-
-          <div className='my-2 text-highlight-2'>
-            {tx && tx.hash ? <>
-              {<EtherscanTxLink
-                chainId={chainId}
-                hash={tx.hash}
-              >
-                See the result on Etherscan
-              </EtherscanTxLink>} or check the JS console.
-            </> : <>
-              Transaction Signature Denied
-            </>}
-          </div>
-        </>}
-
-
-
-        <div
-          className='mt-6 font-bold uppercase text-default-soft text-xs sm:text-sm lg:text-base'
-        >
-          {tx.hash && <>
-            Tx Hash
-          </>}
-        </div>
-
-        <div
-          className='uppercase text-lightPurple-600 text-sm sm:text-base opacity-70 hover:opacity-70'
-        >
-          {tx.hash && <>
-            {<EtherscanTxLink
-              chainId={chainId}
-              hash={tx.hash}
-            >
-              {shorten(tx.hash)}
-            </EtherscanTxLink>}
-          </>}
-        </div>
-
-
-        {handleReset && txCompleted && <>
-          <div className='mt-6 mb-2 text-center'>
-            <button
-              className='font-bold rounded-full text-green border-2 sm:border-4 border-green-300 hover:text-white hover:bg-lightPurple-1000 text-sm sm:text-base pt-2 pb-2 px-6 trans'
-              onClick={handleReset}
-            >
-              {resetButtonText || 'Reset form'}
-            </button>
-          </div>
-        </>}
-
-        
-
-      </div>
-    </>}
-
-  </>
-
+      {handleReset && txCompleted && (
+        <Button size='sm' className='mt-4 mx-auto' color='secondary' onClick={handleReset}>
+          {resetButtonText || 'Reset form'}
+        </Button>
+      )}
+    </InnerCard>
+  )
 }

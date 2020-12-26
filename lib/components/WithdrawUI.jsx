@@ -1,16 +1,21 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { ethers } from 'ethers'
+import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { ethers } from 'ethers'
+import { useAtom } from 'jotai'
+import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
 
-import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
-
-import { useDebounce } from 'lib/hooks/useDebounce'
-import { WithdrawForm } from 'lib/components/WithdrawForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
+import { WithdrawForm } from 'lib/components/WithdrawForm'
+import { useDebounce } from 'lib/hooks/useDebounce'
+import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { fetchExitFee } from 'lib/utils/fetchExitFee'
 import { poolToast } from 'lib/utils/poolToast'
 import { sendTx } from 'lib/utils/sendTx'
+import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
+import { networkAtom } from 'lib/hooks/useNetwork'
+import { usersAddressAtom } from 'lib/hooks/useUsersAddress'
+import { ConnectWalletButton } from 'lib/components/ConnectWalletButton'
 
 const handleWithdrawSubmit = async (
   setTx,
@@ -23,18 +28,12 @@ const handleWithdrawSubmit = async (
   maxExitFee,
   decimals
 ) => {
-  if (
-    !withdrawAmount
-  ) {
+  if (!withdrawAmount) {
     poolToast.error(`Withdraw Amount needs to be filled in`)
     return
   }
 
-  const params = [
-    usersAddress,
-    ethers.utils.parseUnits(withdrawAmount, decimals),
-    ticketAddress,
-  ]
+  const params = [usersAddress, ethers.utils.parseUnits(withdrawAmount, decimals), ticketAddress]
 
   let method = 'withdrawWithTimelockFrom'
   if (withdrawType === 'instant') {
@@ -45,31 +44,20 @@ const handleWithdrawSubmit = async (
   // TX overrides
   params.push({ gasLimit: 800000 })
 
-  await sendTx(
-    setTx,
-    provider,
-    contractAddress,
-    CompoundPrizePoolAbi,
-    method,
-    params,
-    'Withdraw'
-  )
+  await sendTx(setTx, provider, contractAddress, PrizePoolAbi, method, params, 'Withdraw')
 }
 
 export const WithdrawUI = (props) => {
-  const { genericChainValues } = props
-
-  const { tokenDecimals } = genericChainValues
-
-  const router = useRouter()
-  const networkName = router.query.networkName
-
-  const prizePool = props.poolAddresses.prizePool
-  const ticketAddress = props.poolAddresses.ticket
-
   const walletContext = useContext(WalletContext)
+  const [poolAddresses] = useAtom(poolAddressesAtom)
+  const [poolChainValues] = useAtom(poolChainValuesAtom)
+  const [usersAddress] = useAtom(usersAddressAtom)
+  const [network] = useAtom(networkAtom)
+
+  const { tokenDecimals } = poolChainValues
+  const { prizePool, ticket: ticketAddress } = poolAddresses
+
   const provider = walletContext.state.provider
-  const usersAddress = walletContext._onboard.getState().address
 
   const [exitFees, setExitFees] = useState({})
   const maxExitFee = exitFees?.exitFee
@@ -83,7 +71,7 @@ export const WithdrawUI = (props) => {
     const t = async () => {
       if (debouncedWithdrawAmount) {
         const result = await fetchExitFee(
-          networkName,
+          network.name,
           usersAddress,
           prizePool,
           ticketAddress,
@@ -98,11 +86,10 @@ export const WithdrawUI = (props) => {
     t()
   }, [debouncedWithdrawAmount])
 
-
   const [tx, setTx] = useState({
     inWallet: false,
     sent: false,
-    completed: false,
+    completed: false
   })
 
   const txInFlight = tx.inWallet || tx.sent
@@ -110,11 +97,38 @@ export const WithdrawUI = (props) => {
   const resetState = (e) => {
     e.preventDefault()
     setWithdrawAmount('')
-    setTx({})
+    setTx({
+      inWallet: false,
+      sent: false,
+      completed: false
+    })
   }
 
-  return <>
-    {!txInFlight ? <>
+  if (!usersAddress) {
+    return <ConnectWalletButton />
+  }
+
+  const withdrawText = `You can choose to withdraw the deposited fund at any time. By withdrawing the fund, you
+  are eliminating/reducing the chance to win the prize in this pool in the next prize
+  periods.`
+
+  if (txInFlight) {
+    return (
+      <>
+        <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{withdrawText}</div>
+        <TxMessage
+          txType='Withdraw'
+          tx={tx}
+          handleReset={resetState}
+          resetButtonText='Withdraw more'
+        />
+      </>
+    )
+  }
+
+  return (
+    <>
+      <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{withdrawText}</div>
       <WithdrawForm
         {...props}
         exitFees={exitFees}
@@ -136,20 +150,13 @@ export const WithdrawUI = (props) => {
         vars={{
           maxExitFee,
           withdrawAmount,
-          withdrawType,
+          withdrawType
         }}
         stateSetters={{
           setWithdrawAmount,
-          setWithdrawType,
+          setWithdrawType
         }}
       />
-    </> : <>
-      <TxMessage
-        txType='Withdraw'
-        tx={tx}
-        handleReset={resetState}
-      />
-    </>}
-
-  </>
+    </>
+  )
 }
