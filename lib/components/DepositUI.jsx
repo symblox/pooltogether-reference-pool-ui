@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
 import { ethers } from 'ethers'
-
+import { FormattedMessage } from 'react-intl'
 import { DepositForm } from 'lib/components/DepositForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
@@ -89,8 +89,15 @@ export const DepositUI = props => {
   const ticketAddress = poolAddresses.ticket
   const tokenSymbol = poolChainValues.tokenSymbol || 'TOKEN'
   const ticketSymbol = poolChainValues.ticketSymbol || 'TOKEN'
-  const depositMessage = `You can deposit ${tokenSymbol} to be eligible to win the prizes in this pool. Once deposited you will receive ${ticketSymbol} and be entered to win until your ${tokenSymbol} is withdrawn.`
-
+  const depositMessage = (
+    <FormattedMessage
+      id="DEPOSIT_DIRECTIONS"
+      values={{
+        token: tokenSymbol,
+        ticket: ticketSymbol,
+      }}
+    />
+  )
   const [depositAmount, setDepositAmount] = useState('')
 
   const [tx, setTx] = useState({
@@ -125,7 +132,7 @@ export const DepositUI = props => {
           txType="Deposit"
           tx={tx}
           handleReset={resetState}
-          resetButtonText="Deposit more"
+          resetButtonText={<FormattedMessage id="DEPOSIT_MORE" />}
         />
       </>
     )

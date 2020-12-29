@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import IERC20Abi from '@pooltogether/pooltogether-contracts/abis/IERC20Upgradeable'
 import { useAtom } from 'jotai'
 import FeatherIcon from 'feather-icons-react'
-
+import { FormattedMessage } from 'react-intl'
 import { Button } from 'lib/components/Button'
 import { TextInputGroup } from 'lib/components/TextInputGroup'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
@@ -84,7 +84,7 @@ export const DepositForm = props => {
         <TextInputGroup
           id="depositAmount"
           name="depositAmount"
-          label="Deposit amount"
+          label={<FormattedMessage id="DEPOSIT_AMOUNT" />}
           unit={tokenSymbol}
           required
           disabled={!hasApprovedBalance}
@@ -102,8 +102,8 @@ export const DepositForm = props => {
                 }}
               >
                 {/* Balance:  */}
-                MAX - {numberWithCommas(tokenBal, { precision: 4 })}{' '}
-                {tokenSymbol}
+                <FormattedMessage id="MAX" /> -{' '}
+                {numberWithCommas(tokenBal, { precision: 4 })} {tokenSymbol}
               </button>
             )
           }
@@ -132,7 +132,7 @@ export const DepositForm = props => {
           color="secondary"
           className="ml-4"
         >
-          Deposit
+          <FormattedMessage id="DEPOSIT" />
         </Button>
       </div>
     </form>

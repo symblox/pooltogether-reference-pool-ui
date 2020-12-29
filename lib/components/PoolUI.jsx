@@ -166,7 +166,7 @@ export const PoolUI = props => {
     tokenSvg = BatSvg
   } else if (tokenSymbol === 'DAI') {
     tokenSvg = DaiSvg
-  }  else if (tokenSymbol === 'USDC') {
+  } else if (tokenSymbol === 'USDC') {
     tokenSvg = UsdcSvg
   } else if (tokenSymbol === 'USDT') {
     tokenSvg = UsdtSvg

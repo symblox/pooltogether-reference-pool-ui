@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { ethers } from 'ethers'
 import { useAtom } from 'jotai'
 import PrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/PrizePool'
-
+import { FormattedMessage } from 'react-intl'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { WithdrawForm } from 'lib/components/WithdrawForm'
@@ -26,14 +26,18 @@ const handleWithdrawSubmit = async (
   withdrawAmount,
   withdrawType,
   maxExitFee,
-  decimals
+  decimals,
 ) => {
   if (!withdrawAmount) {
     poolToast.error(`Withdraw Amount needs to be filled in`)
     return
   }
 
-  const params = [usersAddress, ethers.utils.parseUnits(withdrawAmount, decimals), ticketAddress]
+  const params = [
+    usersAddress,
+    ethers.utils.parseUnits(withdrawAmount, decimals),
+    ticketAddress,
+  ]
 
   let method = 'withdrawWithTimelockFrom'
   if (withdrawType === 'instant') {
@@ -44,10 +48,18 @@ const handleWithdrawSubmit = async (
   // TX overrides
   params.push({ gasLimit: 800000 })
 
-  await sendTx(setTx, provider, contractAddress, PrizePoolAbi, method, params, 'Withdraw')
+  await sendTx(
+    setTx,
+    provider,
+    contractAddress,
+    PrizePoolAbi,
+    method,
+    params,
+    'Withdraw',
+  )
 }
 
-export const WithdrawUI = (props) => {
+export const WithdrawUI = props => {
   const walletContext = useContext(WalletContext)
   const [poolAddresses] = useAtom(poolAddressesAtom)
   const [poolChainValues] = useAtom(poolChainValuesAtom)
@@ -75,7 +87,7 @@ export const WithdrawUI = (props) => {
           usersAddress,
           prizePool,
           ticketAddress,
-          ethers.utils.parseUnits(debouncedWithdrawAmount, tokenDecimals)
+          ethers.utils.parseUnits(debouncedWithdrawAmount, tokenDecimals),
         )
         setExitFees(result)
       } else {
@@ -89,18 +101,18 @@ export const WithdrawUI = (props) => {
   const [tx, setTx] = useState({
     inWallet: false,
     sent: false,
-    completed: false
+    completed: false,
   })
 
   const txInFlight = tx.inWallet || tx.sent
 
-  const resetState = (e) => {
+  const resetState = e => {
     e.preventDefault()
     setWithdrawAmount('')
     setTx({
       inWallet: false,
       sent: false,
-      completed: false
+      completed: false,
     })
   }
 
@@ -108,19 +120,19 @@ export const WithdrawUI = (props) => {
     return <ConnectWalletButton />
   }
 
-  const withdrawText = `You can choose to withdraw the deposited fund at any time. By withdrawing the fund, you
-  are eliminating/reducing the chance to win the prize in this pool in the next prize
-  periods.`
+  const withdrawText = <FormattedMessage id="WITHDRAW_DIRECTIONS" />
 
   if (txInFlight) {
     return (
       <>
-        <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{withdrawText}</div>
+        <div className="mb-4 sm:mb-8 text-sm sm:text-base text-accent-1">
+          {withdrawText}
+        </div>
         <TxMessage
-          txType='Withdraw'
+          txType="Withdraw"
           tx={tx}
           handleReset={resetState}
-          resetButtonText='Withdraw more'
+          resetButtonText={<FormattedMessage id="WITHDRAW_MORE" />}
         />
       </>
     )
@@ -128,11 +140,13 @@ export const WithdrawUI = (props) => {
 
   return (
     <>
-      <div className='mb-4 sm:mb-8 text-sm sm:text-base text-accent-1'>{withdrawText}</div>
+      <div className="mb-4 sm:mb-8 text-sm sm:text-base text-accent-1">
+        {withdrawText}
+      </div>
       <WithdrawForm
         {...props}
         exitFees={exitFees}
-        handleSubmit={(e) => {
+        handleSubmit={e => {
           e.preventDefault()
 
           handleWithdrawSubmit(
@@ -144,17 +158,17 @@ export const WithdrawUI = (props) => {
             withdrawAmount,
             withdrawType,
             maxExitFee,
-            tokenDecimals
+            tokenDecimals,
           )
         }}
         vars={{
           maxExitFee,
           withdrawAmount,
-          withdrawType
+          withdrawType,
         }}
         stateSetters={{
           setWithdrawAmount,
-          setWithdrawType
+          setWithdrawType,
         }}
       />
     </>

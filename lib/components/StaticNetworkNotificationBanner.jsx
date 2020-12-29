@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import classnames from 'classnames'
-
+import { FormattedMessage } from 'react-intl'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { SUPPORTED_NETWORKS } from 'lib/constants'
 import { chainIdToName } from 'lib/utils/chainIdToName'
@@ -34,14 +34,22 @@ export const StaticNetworkNotificationBanner = ({}) => {
 
   return (
     <div
-      className={classnames('text-sm sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3', {
-        'text-white bg-red-1': !networkSupported,
-        'text-default bg-purple-1': networkSupported
-      })}
+      className={classnames(
+        'text-sm sm:text-base lg:text-lg sm:px-6 py-2 sm:py-3',
+        {
+          'text-white bg-red-1': !networkSupported,
+          'text-default bg-purple-1': networkSupported,
+        },
+      )}
     >
-      <div className='text-center px-4'>
-        This works on {supportedNames}. Your wallet is currently set to{' '}
-        <span className='font-bold'>{networkWords}</span>
+      <div className="text-center px-4">
+        <FormattedMessage
+          id="NETWORK_TIP"
+          values={{
+            supportedNames,
+          }}
+        />{' '}
+        <span className="font-bold">{networkWords}</span>
       </div>
     </div>
   )

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { atom, useAtom } from 'jotai'
 import { useRouter } from 'next/router'
-
+import { FormattedMessage } from 'react-intl'
 import { LoadingDots } from 'lib/components/LoadingDots'
 import { usePoolAddresses } from 'lib/hooks/usePoolAddresses'
 import { usePoolChainValues } from 'lib/hooks/usePoolChainValues'
@@ -20,7 +20,7 @@ import { useDetermineContractVersions } from 'lib/hooks/useDetermineContractVers
 export const getDataFetchingErrorMessage = (address, type, message) =>
   `Error fetching ${type} for prize pool with address: ${address}: ${message}. (maybe wrong Ethereum network or your IP is being rate-limited?)`
 
-const renderErrorMessage = (errorMsg) => {
+const renderErrorMessage = errorMsg => {
   console.error(errorMsg)
   poolToast.error(errorMsg)
 }
@@ -28,7 +28,7 @@ const renderErrorMessage = (errorMsg) => {
 export const EMPTY_ERROR_STATE = {
   error: null,
   errorMessage: null,
-  view: null
+  view: null,
 }
 
 // Jotai Atoms
@@ -37,7 +37,7 @@ export const errorStateAtom = atom(EMPTY_ERROR_STATE)
 /**
  * Wraps app and populates Jotai pool data stores if applicable
  */
-export const PoolData = (props) => {
+export const PoolData = props => {
   const router = useRouter()
   const { prizePoolAddress } = router.query
 
@@ -51,7 +51,9 @@ export const PoolData = (props) => {
   try {
     ethers.utils.getAddress(String(prizePoolAddress))
   } catch (e) {
-    throw new Error(`Incorrectly formatted Ethereum address! ${prizePoolAddress}`)
+    throw new Error(
+      `Incorrectly formatted Ethereum address! ${prizePoolAddress}`,
+    )
   }
 
   // Error Catching
@@ -71,7 +73,7 @@ export const PoolData = (props) => {
 /**
  * Main wrapper for the data fetching
  */
-const PoolDataInitialization = (props) => {
+const PoolDataInitialization = props => {
   useDetermineContractVersions()
   useNetwork()
   useUsersAddress()
@@ -84,10 +86,12 @@ const PoolDataInitialization = (props) => {
 
   if (poolChainValues.loading) {
     return (
-      <div className='text-center text-xl'>
+      <div className="text-center text-xl">
         <LoadingDots />
         <br />
-        <h1>Fetching chain values ...</h1>
+        <h1>
+          <FormattedMessage id="FETCHING_DATA" />
+        </h1>
       </div>
     )
   }

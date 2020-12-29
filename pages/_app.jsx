@@ -2,7 +2,7 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 import { Provider as JotaiProvider } from 'jotai'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
-
+import { LanguageProvider } from 'lib/contexts/LanguageContext'
 import { Layout } from 'lib/components/Layout'
 import { ThemeContextProvider } from 'lib/components/contextProviders/ThemeContextProvider'
 import { ErrorBoundary } from 'lib/components/ErrorBoundary'
@@ -30,29 +30,34 @@ import 'assets/styles/reach--custom.css'
 const queryCache = new QueryCache()
 
 const DynamicWalletContextProvider = dynamic(
-  () => import('lib/components/WalletContextProvider').then((mod) => mod.WalletContextProvider),
-  { ssr: false }
+  () =>
+    import('lib/components/WalletContextProvider').then(
+      mod => mod.WalletContextProvider,
+    ),
+  { ssr: false },
 )
 
-function MyApp ({ Component, pageProps }) {
+function MyApp({ Component, pageProps }) {
   return (
-    <ErrorBoundary>
-      <DynamicWalletContextProvider>
-        <ReactQueryCacheProvider queryCache={queryCache}>
-          <ThemeContextProvider>
-            <JotaiProvider>
-              <Layout>
-                <ErrorBoundary>
-                  <PoolData>
-                    <Component {...pageProps} />
-                  </PoolData>
-                </ErrorBoundary>
-              </Layout>
-            </JotaiProvider>
-          </ThemeContextProvider>
-        </ReactQueryCacheProvider>
-      </DynamicWalletContextProvider>
-    </ErrorBoundary>
+    <LanguageProvider>
+      <ErrorBoundary>
+        <DynamicWalletContextProvider>
+          <ReactQueryCacheProvider queryCache={queryCache}>
+            <ThemeContextProvider>
+              <JotaiProvider>
+                <Layout>
+                  <ErrorBoundary>
+                    <PoolData>
+                      <Component {...pageProps} />
+                    </PoolData>
+                  </ErrorBoundary>
+                </Layout>
+              </JotaiProvider>
+            </ThemeContextProvider>
+          </ReactQueryCacheProvider>
+        </DynamicWalletContextProvider>
+      </ErrorBoundary>
+    </LanguageProvider>
   )
 }
 

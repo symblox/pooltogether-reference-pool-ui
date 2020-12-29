@@ -1,7 +1,7 @@
 import React from 'react'
 import { ethers } from 'ethers'
 import { useAtom } from 'jotai'
-
+import { FormattedMessage } from 'react-intl'
 import { Button } from 'lib/components/Button'
 import { PTHint } from 'lib/components/PTHint'
 import { RadioInputGroup } from 'lib/components/RadioInputGroup'
@@ -98,22 +98,19 @@ export const WithdrawForm = props => {
           label={
             <>
               <div className="text-sm">
-                What type of withdraw?{' '}
+                <FormattedMessage id="WITHDRAW_TIP" />{' '}
                 <PTHint
-                  title="On fairness fees"
+                  title={<FormattedMessage id="ON_FAIRNESS_FEES" />}
                   tip={
                     <>
                       <div className="my-2 text-xs sm:text-sm">
-                        To maintain fairness your funds need to contribute
-                        interest towards the prize each week. You can:
+                        {<FormattedMessage id="FEES_TIP_TITLE" />}
                       </div>
                       <div className="my-2 text-xs sm:text-sm">
-                        1) SCHEDULE: receive $1000 DAI once enough interest has
-                        been provided to the prize
+                        {<FormattedMessage id="FEES_TIP_1" />}
                       </div>
                       <div className="my-2 text-xs sm:text-sm">
-                        2) INSTANT: pay $1.90 to withdraw right now and forfeit
-                        the interest that would go towards the prize
+                        {<FormattedMessage id="FEES_TIP_2" />}
                       </div>
                     </>
                   }
@@ -127,11 +124,11 @@ export const WithdrawForm = props => {
           radios={[
             {
               value: 'scheduled',
-              label: 'scheduled',
+              label: <FormattedMessage id="SCHEDULED" />,
             },
             {
               value: 'instant',
-              label: 'instant',
+              label: <FormattedMessage id="INSTANT" />,
             },
           ]}
         />
@@ -139,7 +136,7 @@ export const WithdrawForm = props => {
         <TextInputGroup
           id="withdrawAmount"
           name="withdrawAmount"
-          label="Withdraw amounts"
+          label={<FormattedMessage id="WITHDRAW_AMOUNTS" />}
           required
           type="number"
           pattern="\d+"
@@ -157,8 +154,8 @@ export const WithdrawForm = props => {
                   }}
                 >
                   {/* Balance:  */}
-                  MAX - {numberWithCommas(ticketBal, { precision: 4 })}{' '}
-                  {tokenSymbol}
+                  <FormattedMessage id="MAX" /> -{' '}
+                  {numberWithCommas(ticketBal, { precision: 4 })} {tokenSymbol}
                 </button>
               </>
             )
@@ -199,22 +196,22 @@ export const WithdrawForm = props => {
         />
  */}
             <div className="text-yellow-1">
-              You will receive{' '}
+              <FormattedMessage id="YOU_WILL_RECEIVE" />{' '}
               {displayAmountInEther(instantTotal, { decimals: tokenDecimals })}{' '}
-              {tokenSymbol} now&nbsp;
+              {tokenSymbol} &nbsp;
               {exitFee.eq(0) ? (
                 <>
-                  and burn{' '}
+                  <FormattedMessage id="NOW_AND_BURN" />{' '}
                   {displayAmountInEther(burnedCredit, {
                     decimals: tokenDecimals,
                   })}{' '}
-                  from your credit
+                  <FormattedMessage id="FROM_YOUR_CREDIT" />
                 </>
               ) : (
                 <>
-                  and forfeit{' '}
+                  <FormattedMessage id="AND_FORFEIT" />{' '}
                   {displayAmountInEther(exitFee, { decimals: tokenDecimals })}{' '}
-                  {tokenSymbol} as interest
+                  {tokenSymbol} <FormattedMessage id="AS_INTEREST" />
                 </>
               )}
             </div>
@@ -222,15 +219,15 @@ export const WithdrawForm = props => {
             {exitFee.eq(0) && (
               <>
                 <div className="text-sm text-default my-6">
-                  <em className="text-white">Why is the fairness fee $0?</em>
+                  <em className="text-white">
+                    <FormattedMessage id="FAIRNESS_FEE_TIP" />
+                  </em>
                   <br />
                   <br />
-                  The fairness fee is based on the previous prize and other
-                  factors (see documentation or contract code).
+                  <FormattedMessage id="FAIRNESS_FEE_TIP2" />
                   <br />
                   <br />
-                  You may want to pay fairness fee's on behalf of your users
-                  and/or hide the fairness fee when it's $0.
+                  <FormattedMessage id="FAIRNESS_FEE_TIP3" />
                 </div>
               </>
             )}
@@ -240,20 +237,21 @@ export const WithdrawForm = props => {
         {!overBalance && timelockDurationSeconds && withdrawType !== 'instant' && (
           <>
             <div className="text-yellow-1">
-              You will receive{' '}
+              <FormattedMessage id="YOU_WILL_RECEIVE" />{' '}
               {displayAmountInEther(instantTotal, { decimals: tokenDecimals })}{' '}
               {tokenSymbol}&nbsp;
               {timelockDurationSeconds.eq(0) ? (
                 <>
-                  now and burn {timelockCredit} {tokenSymbol} from your credit
+                  <FormattedMessage id="NOW_AND_BURN" /> {timelockCredit}{' '}
+                  {tokenSymbol} <FormattedMessage id="FROM_YOUR_CREDIT" />
                 </>
               ) : (
                 <>
-                  in{' '}
+                  <FormattedMessage id="IN" />{' '}
                   {numberWithCommas(timelockDurationSeconds, {
                     precision: 0,
                   }).toString()}{' '}
-                  seconds
+                  <FormattedMessage id="SECONDS" />
                 </>
               )}
             </div>
@@ -262,7 +260,7 @@ export const WithdrawForm = props => {
 
         <div className="my-5">
           <Button disabled={overBalance} color="warning" size="lg">
-            Withdraw
+            <FormattedMessage id="WITHDRAW" />
           </Button>
         </div>
       </form>

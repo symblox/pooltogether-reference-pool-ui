@@ -7,6 +7,7 @@ import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
 import { calculateOdds } from 'lib/utils/calculateOdds'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
+import { FormattedMessage } from 'react-intl'
 
 export const DepositorOddsCards = props => {
   return (
@@ -29,7 +30,9 @@ const TicketCard = () => {
 
   return (
     <Card className="mr-4 text-center">
-      <CardTitle>My tickets</CardTitle>
+      <CardTitle>
+        <FormattedMessage id="MY_TICKETS" />
+      </CardTitle>
       <CardPrimaryText>{`${balance} ${symbol}`}</CardPrimaryText>
     </Card>
   )
@@ -48,7 +51,9 @@ const OddsCard = () => {
   if (!odds) {
     return (
       <Card className="mx-4 text-center">
-        <CardTitle>My winning odds</CardTitle>
+        <CardTitle>
+          <FormattedMessage id="MY_WINNING_ODDS" />
+        </CardTitle>
         <CardPrimaryText>0</CardPrimaryText>
       </Card>
     )
@@ -58,7 +63,9 @@ const OddsCard = () => {
 
   return (
     <Card className="mx-4 text-center">
-      <CardTitle>My winning odds</CardTitle>
+      <CardTitle>
+        <FormattedMessage id="MY_WINNING_ODDS" />
+      </CardTitle>
       <CardPrimaryText>1 in {formattedOdds}</CardPrimaryText>
     </Card>
   )
@@ -75,7 +82,9 @@ const BalanceCard = () => {
 
   return (
     <Card className="ml-4 text-center">
-      <CardTitle>My wallet balance</CardTitle>
+      <CardTitle>
+        <FormattedMessage id="MY_WALLET_BALANCE" />
+      </CardTitle>
       <CardPrimaryText>{`${balance} ${symbol}`}</CardPrimaryText>
     </Card>
   )

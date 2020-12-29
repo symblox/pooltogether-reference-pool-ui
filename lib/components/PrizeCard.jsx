@@ -3,7 +3,7 @@ import { useAtom } from 'jotai'
 import FeatherIcon from 'feather-icons-react'
 import classnames from 'classnames'
 import { useQuery } from 'react-query'
-
+import { FormattedMessage } from 'react-intl'
 import { Button } from 'lib/components/Button'
 import { Card, CardTitle } from 'lib/components/Card'
 import { LoadingDots } from 'lib/components/LoadingDots'
@@ -17,7 +17,7 @@ import { InternalLink } from 'lib/components/InternalLink'
 
 import Cactus from 'assets/images/cactus.svg'
 
-export const PrizeCard = (props) => {
+export const PrizeCard = props => {
   const { showLinks, className } = props
   const [network] = useAtom(networkAtom)
   const [poolAddresses] = useAtom(poolAddressesAtom)
@@ -30,25 +30,25 @@ export const PrizeCard = (props) => {
       <PrizeSection />
       <NewPrizeCountdown center />
       {showLinks && (
-        <div className='flex flex-col mt-4 w-2/4 mx-auto'>
+        <div className="flex flex-col mt-4 w-2/4 mx-auto">
           <Button
             href={`/pools/[networkName]/[prizePoolAddress]/home`}
             as={`/pools/${networkName}/${prizePoolAddress}/home`}
-            size='3xl'
-            color='primary'
+            size="3xl"
+            color="primary"
             fullWidth
           >
             Deposit to win
           </Button>
-          <div className='flex justify-between mt-4'>
+          <div className="flex justify-between mt-4">
             <InternalLink
               href={`/pools/[networkName]/[prizePoolAddress]/manage`}
               as={`/pools/${networkName}/${prizePoolAddress}/manage`}
             >
               Manage pool{' '}
               <FeatherIcon
-                icon='settings'
-                strokeWidth='0.25rem'
+                icon="settings"
+                strokeWidth="0.25rem"
                 className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
               />
             </InternalLink>
@@ -58,8 +58,8 @@ export const PrizeCard = (props) => {
             >
               My Account{' '}
               <FeatherIcon
-                icon='arrow-right'
-                strokeWidth='0.25rem'
+                icon="arrow-right"
+                strokeWidth="0.25rem"
                 className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
               />
             </InternalLink>
@@ -70,7 +70,7 @@ export const PrizeCard = (props) => {
   )
 }
 
-const PrizeSection = (props) => {
+const PrizeSection = props => {
   const { awards, loading } = useAwardsList()
 
   if (loading) {
@@ -84,17 +84,19 @@ const PrizeSection = (props) => {
   if (awards.length === 0) {
     return (
       <>
-        <CardTitle className='text-center mb-2 font-bold'>
+        <CardTitle className="text-center mb-2 font-bold">
           No prize data available at the moment
         </CardTitle>
-        <CardTitle className='text-center'>
+        <CardTitle className="text-center">
           We're growing new prizes worth winning for you.
         </CardTitle>
-        <CardTitle className='text-center mb-8'>Check back on us soon!</CardTitle>
+        <CardTitle className="text-center mb-8">
+          Check back on us soon!
+        </CardTitle>
         <img
-          alt='image of a cactus'
+          alt="image of a cactus"
           src={Cactus}
-          className='mx-auto w-8 h-8 sm:w-32 sm:h-32 mb-4 sm:mb-8'
+          className="mx-auto w-8 h-8 sm:w-32 sm:h-32 mb-4 sm:mb-8"
         />
       </>
     )
@@ -103,13 +105,15 @@ const PrizeSection = (props) => {
   return (
     <>
       {' '}
-      <CardTitle className='text-center'>Current Prize</CardTitle>
+      <CardTitle className="text-center">
+        <FormattedMessage id="CURRENT_PRIZE" />
+      </CardTitle>
       <Prizes />
     </>
   )
 }
 
-const Prizes = (props) => {
+const Prizes = props => {
   const { awards, loading } = useAwardsList()
 
   if (awards.length === 1) {
@@ -118,7 +122,7 @@ const Prizes = (props) => {
 
   return (
     <ul
-      className='flex flex-col my-2 sm:my-8 max-w-xs mx-auto overflow-auto'
+      className="flex flex-col my-2 sm:my-8 max-w-xs mx-auto overflow-auto"
       style={{ maxHeight: '160px', minWidth: '230px' }}
     >
       {awards.map((token, index) => {
@@ -129,7 +133,7 @@ const Prizes = (props) => {
   )
 }
 
-const SinglePrizeItem = (props) => {
+const SinglePrizeItem = props => {
   const { token } = props
   const [coinGeckoTokenIds] = useAtom(coinGeckoTokenIdsAtom)
   const tokenId = coinGeckoTokenIds[getCoinGeckoId(token)]
@@ -138,14 +142,20 @@ const SinglePrizeItem = (props) => {
 
   return (
     <div className={'flex mx-auto my-2 sm:my-8 leading-none'}>
-      {imageUrl && <img src={imageUrl} className='w-4 h-4 sm:w-16 sm:h-16 mr-4 my-auto' />}
-      <span className='font-bold text-2xl sm:text-9xl mr-4 my-auto'>{token.formattedBalance}</span>
-      <span className='font-bolt text-sm sm:text-4xl mt-auto mb-1'>{token.symbol}</span>
+      {imageUrl && (
+        <img src={imageUrl} className="w-4 h-4 sm:w-16 sm:h-16 mr-4 my-auto" />
+      )}
+      <span className="font-bold text-2xl sm:text-9xl mr-4 my-auto">
+        {token.formattedBalance}
+      </span>
+      <span className="font-bolt text-sm sm:text-4xl mt-auto mb-1">
+        {token.symbol}
+      </span>
     </div>
   )
 }
 
-const PrizeListItem = (props) => {
+const PrizeListItem = props => {
   const token = props.token
   const index = props.index || 0
   const [coinGeckoTokenIds] = useAtom(coinGeckoTokenIdsAtom)
@@ -155,10 +165,13 @@ const PrizeListItem = (props) => {
 
   if (imageUrl) {
     return (
-      <li key={index + token.symbol} className='flex w-full justify-between mb-2'>
-        <span className='font-bold'>{token.formattedBalance}</span>
-        <div className='flex ml-4'>
-          <img className='my-auto mr-2 w-6 h-6' src={imageUrl} />
+      <li
+        key={index + token.symbol}
+        className="flex w-full justify-between mb-2"
+      >
+        <span className="font-bold">{token.formattedBalance}</span>
+        <div className="flex ml-4">
+          <img className="my-auto mr-2 w-6 h-6" src={imageUrl} />
           {token.name || token.symbol}
         </div>
       </li>
@@ -166,9 +179,9 @@ const PrizeListItem = (props) => {
   }
 
   return (
-    <li key={index + token.symbol} className='flex justify-between mb-2'>
-      <span className='font-bold'>{token.formattedBalance}</span>
-      <div className='flex ml-4'>{token.name || token.symbol}</div>
+    <li key={index + token.symbol} className="flex justify-between mb-2">
+      <span className="font-bold">{token.formattedBalance}</span>
+      <div className="flex ml-4">{token.name || token.symbol}</div>
     </li>
   )
 }
