@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { FormattedMessage } from 'react-intl'
 import MailFooterIcon from 'assets/images/mail-footer.svg'
 import MediumFooterLogo from 'assets/images/medium-footer.svg'
@@ -6,9 +6,21 @@ import GithubFooterLogo from 'assets/images/github-footer.svg'
 import DiscordLogo from 'assets/images/discord-footer.svg'
 import TwitterFooterLogo from 'assets/images/twitter-footer.svg'
 
+import { languageOptions } from '../constants'
+import { LanguageContext } from '../contexts/LanguageContext'
+
 export const Footer = () => {
+  const { language, setLanguage } = useContext(LanguageContext)
   let mailHref = 'mailto:hello@pooltogether.com'
   let twitterHref = 'https://twitter.com/PoolTogether_'
+
+  const onChange = event => {
+    if (event.target.value == 'EN') {
+      setLanguage(languageOptions[0])
+    } else {
+      setLanguage(languageOptions[1])
+    }
+  }
 
   return (
     <footer className="footer w-full text-default text-sm sm:px-8 lg:px-0">
@@ -67,6 +79,20 @@ export const Footer = () => {
 
           <div className="mt-3 sm:mt-0 mb-2 sm:mb-0">
             <nav className="flex sm:justify-between w-full">
+              <select
+                className="select-lang"
+                name="lang"
+                id="lang"
+                defaultValue={language.value}
+                onChange={onChange}
+              >
+                <option key="zh" value="中">
+                  中
+                </option>
+                <option key="en" value="EN">
+                  EN
+                </option>
+              </select>
               <a
                 className="img-link inline-block trans mr-3 lg:mr-0 lg:ml-4 w-5 h-5 "
                 href={twitterHref}
