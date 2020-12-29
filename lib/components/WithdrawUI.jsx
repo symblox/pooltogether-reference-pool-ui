@@ -47,7 +47,6 @@ const handleWithdrawSubmit = async (
 
   // TX overrides
   params.push({ gasLimit: 800000 })
-
   await sendTx(
     setTx,
     provider,
@@ -72,6 +71,8 @@ export const WithdrawUI = props => {
   const provider = walletContext.state.provider
 
   const [exitFees, setExitFees] = useState({})
+  const [loading, setLoading] = useState({})
+
   const maxExitFee = exitFees?.exitFee
 
   const [withdrawAmount, setWithdrawAmount] = useState('')
@@ -81,6 +82,7 @@ export const WithdrawUI = props => {
 
   useEffect(() => {
     const t = async () => {
+      setLoading(true)
       if (debouncedWithdrawAmount) {
         const result = await fetchExitFee(
           network.name,
@@ -93,6 +95,7 @@ export const WithdrawUI = props => {
       } else {
         setExitFees(null)
       }
+      setLoading(false)
     }
 
     t()
@@ -145,6 +148,7 @@ export const WithdrawUI = props => {
       </div>
       <WithdrawForm
         {...props}
+        loading={loading}
         exitFees={exitFees}
         handleSubmit={e => {
           e.preventDefault()

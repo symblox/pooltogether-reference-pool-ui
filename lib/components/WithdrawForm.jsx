@@ -15,7 +15,7 @@ import { InnerCard } from 'lib/components/Card'
 import Warning from 'assets/images/warning.svg'
 
 export const WithdrawForm = props => {
-  const { exitFees, handleSubmit, vars, stateSetters } = props
+  const { exitFees, handleSubmit, vars, stateSetters, loading } = props
 
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [usersChainValues] = useAtom(userChainValuesAtom)
@@ -259,7 +259,7 @@ export const WithdrawForm = props => {
         )}
 
         <div className="my-5">
-          <Button disabled={overBalance} color="warning" size="lg">
+          <Button disabled={overBalance || loading} color="warning" size="lg">
             <FormattedMessage id="WITHDRAW" />
           </Button>
         </div>
