@@ -8,9 +8,9 @@ import { calculateOdds } from 'lib/utils/calculateOdds'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 
-export const DepositorOddsCards = (props) => {
+export const DepositorOddsCards = props => {
   return (
-    <div className='flex'>
+    <div className="flex">
       <TicketCard />
       <OddsCard />
       <BalanceCard />
@@ -23,12 +23,12 @@ const TicketCard = () => {
   const [userChainValues] = useAtom(userChainValuesAtom)
   const balance = displayAmountInEther(userChainValues.usersTicketBalance, {
     precision: 0,
-    decimals: poolChainValues.ticketDecimals
+    decimals: poolChainValues.ticketDecimals,
   })
   const symbol = poolChainValues.ticketSymbol
 
   return (
-    <Card className='mr-4 text-center'>
+    <Card className="mr-4 text-center">
       <CardTitle>My tickets</CardTitle>
       <CardPrimaryText>{`${balance} ${symbol}`}</CardPrimaryText>
     </Card>
@@ -42,12 +42,12 @@ const OddsCard = () => {
     userChainValues.usersTicketBalance,
     poolChainValues.ticketTotalSupply,
     poolChainValues.ticketDecimals,
-    poolChainValues.numberOfWinners
+    poolChainValues.numberOfWinners,
   )
 
   if (!odds) {
     return (
-      <Card className='mx-4 text-center'>
+      <Card className="mx-4 text-center">
         <CardTitle>My winning odds</CardTitle>
         <CardPrimaryText>0</CardPrimaryText>
       </Card>
@@ -57,7 +57,7 @@ const OddsCard = () => {
   const formattedOdds = numberWithCommas(odds, { precision: 2 })
 
   return (
-    <Card className='mx-4 text-center'>
+    <Card className="mx-4 text-center">
       <CardTitle>My winning odds</CardTitle>
       <CardPrimaryText>1 in {formattedOdds}</CardPrimaryText>
     </Card>
@@ -69,12 +69,12 @@ const BalanceCard = () => {
   const [userChainValues] = useAtom(userChainValuesAtom)
   const balance = displayAmountInEther(userChainValues.usersTokenBalance, {
     precision: 2,
-    decimals: poolChainValues.tokenDecimals
+    decimals: poolChainValues.tokenDecimals,
   })
   const symbol = poolChainValues.tokenSymbol
 
   return (
-    <Card className='ml-4 text-center'>
+    <Card className="ml-4 text-center">
       <CardTitle>My wallet balance</CardTitle>
       <CardPrimaryText>{`${balance} ${symbol}`}</CardPrimaryText>
     </Card>

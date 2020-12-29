@@ -124,7 +124,7 @@ export const DepositForm = props => {
         </div>
       )}
       <div className="my-5 flex flex-row">
-        <UnlockDepositsButton />
+        {/* <UnlockDepositsButton /> */}
         <Button
           size="lg"
           fullWidth
