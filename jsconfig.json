@@ -3,5 +3,6 @@
     "baseUrl": ".",
     "jsx": "react",
     "checkJs": true
-  }
+  },
+  "exclude": ["node_modules", "assets", ".next", "out"]
 }
