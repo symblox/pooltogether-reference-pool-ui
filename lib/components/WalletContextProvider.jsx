@@ -5,6 +5,8 @@ import Cookies from 'js-cookie'
 
 import { nameToChainId } from 'lib/utils/nameToChainId'
 
+import customExtensionWalletLogo from 'assets/images/velas-logo.svg'
+
 const debug = require('debug')('WalletContextProvider')
 
 const INFURA_KEY = process.env.NEXT_JS_INFURA_KEY
@@ -28,7 +30,34 @@ if (process.env.NEXT_JS_DOMAIN_NAME) {
   }
 }
 
+const customExtensionWallet = {
+  name: 'Symblox',
+  iconSrc: customExtensionWalletLogo,
+  preferred: true,
+  mobile: true,
+  wallet: async helpers => {
+    const { createModernProviderInterface } = helpers
+    const provider = window.web3.currentProvider
+    const correctWallet = window.web3.currentProvider
+    return {
+      provider,
+      interface: correctWallet ? createModernProviderInterface(provider) : null,
+    }
+  },
+  link: 'https://symblox.io/',
+  installMessage: wallets => {
+    const { currentWallet, selectedWallet } = wallets
+    if (currentWallet) {
+      return `You have ${currentWallet} installed already but if you would prefer to use ${selectedWallet} instead, then click below to install.`
+    }
+
+    return `You will need to install ${selectedWallet} to continue. Click below to install.`
+  },
+  desktop: true,
+}
+
 const WALLETS_CONFIG = [
+  customExtensionWallet,
   { walletName: 'metamask', preferred: true },
   { walletName: 'coinbase', preferred: true },
   { walletName: 'trust', preferred: true, rpcUrl: RPC_URL },

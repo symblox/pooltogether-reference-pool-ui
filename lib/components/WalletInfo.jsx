@@ -6,6 +6,7 @@ import { WalletContext } from 'lib/components/WalletContextProvider'
 import { networkColorClassname } from 'lib/utils/networkColorClassname'
 import { chainIdToName } from 'lib/utils/chainIdToName'
 import { shorten } from 'lib/utils/shorten'
+import { ethToVlx } from 'lib/utils/vlxAddressConversion'
 
 export const WalletInfo = () => {
   const walletContext = useContext(WalletContext)
@@ -27,7 +28,9 @@ export const WalletInfo = () => {
 
   if (chainId && chainId !== 1) {
     networkName = (
-      <span className={classnames(networkColorClassname(chainId), 'inline-block')}>
+      <span
+        className={classnames(networkColorClassname(chainId), 'inline-block')}
+      >
         {chainIdToName(chainId)}
       </span>
     )
@@ -36,12 +39,12 @@ export const WalletInfo = () => {
   if (address && walletName) {
     innerContent = (
       <>
-        <div className='leading-snug text-highlight-3 trans'>
-          <span className='text-highlight-3 hover:text-highlight-1 overflow-ellipsis block w-full no-underline'>
-            {shorten(address)}
+        <div className="leading-snug text-highlight-3 trans">
+          <span className="text-highlight-3 hover:text-highlight-1 overflow-ellipsis block w-full no-underline">
+            {shorten(ethToVlx(address))}
           </span>
 
-          <span className='block sm:inline-block rounded-lg text-default capitalize'>
+          <span className="block sm:inline-block rounded-lg text-default capitalize">
             {walletName} {networkName}
           </span>
         </div>
@@ -52,10 +55,13 @@ export const WalletInfo = () => {
             'text-lightPurple-500 hover:text-white trans ml-2 outline-none focus:outline-none',
             'block border rounded-full w-4 h-4 sm:w-5 sm:h-5 text-center text-lg',
             'border-purple-700 hover:bg-lightPurple-700',
-            'trans'
+            'trans',
           )}
         >
-          <FeatherIcon icon='x' className={classnames('w-3 h-3 hover:text-white m-auto')} />
+          <FeatherIcon
+            icon="x"
+            className={classnames('w-3 h-3 hover:text-white m-auto')}
+          />
         </button>
       </>
     )
@@ -63,7 +69,9 @@ export const WalletInfo = () => {
 
   return (
     <>
-      <div className='relative flex justify-end items-center'>{innerContent}</div>
+      <div className="relative flex justify-end items-center">
+        {innerContent}
+      </div>
     </>
   )
 }
