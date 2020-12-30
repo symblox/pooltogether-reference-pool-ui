@@ -31,7 +31,7 @@ if (process.env.NEXT_JS_DOMAIN_NAME) {
 }
 
 const customExtensionWallet = {
-  name: 'Symblox',
+  name: 'DeFi Wallet',
   iconSrc: customExtensionWalletLogo,
   preferred: true,
   mobile: true,
@@ -59,47 +59,6 @@ const customExtensionWallet = {
 const WALLETS_CONFIG = [
   customExtensionWallet,
   { walletName: 'metamask', preferred: true },
-  { walletName: 'coinbase', preferred: true },
-  { walletName: 'trust', preferred: true, rpcUrl: RPC_URL },
-  {
-    walletName: 'trezor',
-    appUrl: 'https://app.pooltogether.com',
-    email: 'hello@pooltogether.com',
-    rpcUrl: RPC_URL,
-    preferred: true,
-  },
-  {
-    walletName: 'ledger',
-    rpcUrl: RPC_URL,
-    preferred: true,
-  },
-  {
-    walletName: 'fortmatic',
-    apiKey: FORTMATIC_KEY,
-    preferred: true,
-  },
-  {
-    walletName: 'walletLink',
-    rpcUrl: RPC_URL,
-    preferred: true,
-  },
-  {
-    walletName: 'imToken',
-    rpcUrl: RPC_URL,
-    preferred: true,
-  },
-  {
-    walletName: 'huobiwallet',
-    rpcUrl: RPC_URL,
-  },
-  {
-    walletName: 'portis',
-    apiKey: PORTIS_KEY,
-  },
-  { walletName: 'authereum' },
-  { walletName: 'dapper' },
-  { walletName: 'status' },
-  { walletName: 'torus' },
 ]
 
 export const WalletContext = React.createContext()
