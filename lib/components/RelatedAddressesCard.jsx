@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { useAtom } from 'jotai'
+import { FormattedMessage } from 'react-intl'
 import { Card } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
@@ -48,9 +49,12 @@ export const RelatedAddressesCard = props => {
 
   return (
     <Card>
-      <Collapse title="Related contract addresses">
+      <Collapse title={<FormattedMessage id="RELATED_CONTRACT_ADDRESS" />}>
         <Table
-          headers={['Contract', 'Address']}
+          headers={[
+            <FormattedMessage id="CONTRACT" />,
+            <FormattedMessage id="ADDRESS" />,
+          ]}
           rows={rows}
           className="w-full"
         />

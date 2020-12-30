@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useAtom } from 'jotai'
-
+import { FormattedMessage } from 'react-intl'
 import { AdminUI } from 'lib/components/AdminUI'
 import { StatsUI } from 'lib/components/StatsUI'
 import { Content, ContentPane, Tab, Tabs } from 'lib/components/Tabs'
@@ -28,7 +28,7 @@ export const ManageUI = props => {
           selectedTab={selectedTab}
           hash={MANAGE_VIEW.stats}
         >
-          Stats
+          <FormattedMessage id="STATS" />
         </Tab>
         <Tab
           setSelectedTab={setSelectedTab}
@@ -36,7 +36,7 @@ export const ManageUI = props => {
           hash={MANAGE_VIEW.admin}
           className="ml-16"
         >
-          Admin
+          <FormattedMessage id="ADMIN" />
         </Tab>
       </Tabs>
 

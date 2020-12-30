@@ -38,14 +38,14 @@ export const PrizeCard = props => {
             color="primary"
             fullWidth
           >
-            Deposit to win
+            <FormattedMessage id="DEPOSIT_TO_WIN" />
           </Button>
           <div className="flex justify-between mt-4">
             <InternalLink
               href={`/pools/[networkName]/[prizePoolAddress]/manage`}
               as={`/pools/${networkName}/${prizePoolAddress}/manage`}
             >
-              Manage pool{' '}
+              <FormattedMessage id="MANAGE_POOL" />{' '}
               <FeatherIcon
                 icon="settings"
                 strokeWidth="0.25rem"
@@ -56,7 +56,7 @@ export const PrizeCard = props => {
               href={`/pools/[networkName]/[prizePoolAddress]/home`}
               as={`/pools/${networkName}/${prizePoolAddress}/home`}
             >
-              My Account{' '}
+              <FormattedMessage id="MY_ACCOUNT" />{' '}
               <FeatherIcon
                 icon="arrow-right"
                 strokeWidth="0.25rem"

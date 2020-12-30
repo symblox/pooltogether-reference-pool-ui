@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
-
+import { FormattedMessage } from 'react-intl'
 import { AdminUI } from 'lib/components/AdminUI'
 import { FormLockedOverlay } from 'lib/components/FormLockedOverlay'
 import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
@@ -213,14 +213,14 @@ export const PoolUI = props => {
                 selected={isSelected === '#stats'}
                 hash="#stats"
               >
-                Stats
+                <FormattedMessage id="STATS" />
               </Tab>
               <Tab
                 changeHash={changeHash}
                 selected={isSelected === '#interact'}
                 hash="#interact"
               >
-                Interact
+                <FormattedMessage id="INTERACT" />
               </Tab>
               {/* <Tab
                 changeHash={changeHash}
