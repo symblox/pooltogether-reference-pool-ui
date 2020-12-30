@@ -59,14 +59,13 @@ const OddsCard = () => {
     )
   }
 
-  const formattedOdds = numberWithCommas(odds, { precision: 2 })
-
+  const formattedOdds = numberWithCommas((1 / odds) * 100, { precision: 2 })
   return (
     <Card className="mx-4 text-center">
       <CardTitle>
         <FormattedMessage id="MY_WINNING_ODDS" />
       </CardTitle>
-      <CardPrimaryText>1 in {formattedOdds}</CardPrimaryText>
+      <CardPrimaryText>{formattedOdds} %</CardPrimaryText>
     </Card>
   )
 }
