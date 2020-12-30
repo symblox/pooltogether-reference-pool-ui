@@ -27,7 +27,7 @@ export const Nav = props => {
                 <img
                   alt={`PoolTogether Logo`}
                   src={PoolLogo}
-                  className="mr-auto lg:m-0 w-16 sm:w-16"
+                  className="mr-auto lg:m-0 w-32 sm:w-32"
                 />
               </a>
             </Link>

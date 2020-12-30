@@ -12,6 +12,15 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const nextConfig = {
   inlineImageLimit: 48, // make it tiny so that it doesn't inline,
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/pools/vlxtest/0x0AED0f913CA4A9F0Eed6Dbcb526d2DaD32ed7f03',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 const allConfig = withBundleAnalyzer(
