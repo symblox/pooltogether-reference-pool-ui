@@ -201,11 +201,11 @@ export const WithdrawForm = props => {
               {tokenSymbol} &nbsp;
               {exitFee.eq(0) ? (
                 <>
-                  <FormattedMessage id="NOW_AND_BURN" />{' '}
+                  {/* <FormattedMessage id="NOW_AND_BURN" />{' '}
                   {displayAmountInEther(burnedCredit, {
                     decimals: tokenDecimals,
                   })}{' '}
-                  <FormattedMessage id="FROM_YOUR_CREDIT" />
+                  <FormattedMessage id="FROM_YOUR_CREDIT" /> */}
                 </>
               ) : (
                 <>
