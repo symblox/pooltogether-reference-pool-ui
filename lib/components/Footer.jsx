@@ -26,6 +26,7 @@ export const Footer = () => {
     <footer className="footer w-full text-default text-sm sm:px-8 lg:px-0">
       <div className="nav-and-footer-container">
         <div className="flex flex-col sm:flex-row justify-between mt-3 sm:mt-4 lg:mt-6 pb-5 lg:pb-8">
+          {/* 
           <div className="">
             <span className="mb-2 sm:mb-0 invisible sm:visible block sm:inline">
               &copy; {new Date().getFullYear()}{' '}
@@ -39,7 +40,7 @@ export const Footer = () => {
             >
               <FormattedMessage id="FAQ" />
             </a>
-            {/* <a
+            <a
           title='readTheFAQ'
           className='trans mr-4'
           href='https://www.pooltogether.com/faq'
@@ -53,7 +54,7 @@ export const Footer = () => {
           href='https://www.pooltogether.com/#stats'
         >
           stats
-        </a> */}
+        </a> 
             <a
               title="readTerms"
               className="trans mr-4"
@@ -76,9 +77,9 @@ export const Footer = () => {
               <FormattedMessage id="HELP" />
             </a>
           </div>
-
+*/}
           <div className="mt-3 sm:mt-0 mb-2 sm:mb-0">
-            <nav className="flex sm:justify-between w-full">
+            {/* <nav className="flex sm:justify-between w-full"> 
               <select
                 className="select-lang"
                 name="lang"
@@ -156,7 +157,7 @@ export const Footer = () => {
                   }}
                 />
               </a>
-            </nav>
+            </nav>*/}
           </div>
         </div>
       </div>

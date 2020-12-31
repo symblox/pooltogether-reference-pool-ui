@@ -22,7 +22,10 @@ export const Nav = props => {
       <div className="nav-and-footer-container">
         <nav className="sm:px-8 lg:px-0 nav-min-height flex items-center h-full justify-between flex-wrap">
           <div className="w-2/5 lg:w-1/5 justify-start h-full flex items-center truncate">
-            <Link href="/" as="/">
+            <Link
+              href="/pools/vlxtest/0x52b1729d6A81C43D7a464A40eCEBd31337921d3f"
+              as="/pools/vlxtest/0x52b1729d6A81C43D7a464A40eCEBd31337921d3f"
+            >
               <a title={'Back to home'} className="border-0">
                 <img
                   alt={`PoolTogether Logo`}

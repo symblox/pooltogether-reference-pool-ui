@@ -123,7 +123,14 @@ export const WithdrawUI = props => {
     return <ConnectWalletButton />
   }
 
-  const withdrawText = <FormattedMessage id="WITHDRAW_DIRECTIONS" />
+  const withdrawText = (
+    <FormattedMessage
+      id="WITHDRAW_DIRECTIONS"
+      values={{
+        ticket: 'pVLX',
+      }}
+    />
+  )
 
   if (txInFlight) {
     return (

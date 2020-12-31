@@ -28,9 +28,11 @@ export const WithdrawForm = props => {
 
   const { setWithdrawAmount, setWithdrawType } = stateSetters
 
-  const handleWithdrawTypeChange = e => {
-    setWithdrawType(e.target.value)
-  }
+  setWithdrawType('instant')
+
+  // const handleWithdrawTypeChange = e => {
+  //   setWithdrawType(e.target.value)
+  // }
 
   const { isRngRequested, tokenDecimals } = poolChainValues || {}
 
@@ -94,7 +96,7 @@ export const WithdrawForm = props => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <RadioInputGroup
+        {/* <RadioInputGroup
           label={
             <>
               <div className="text-sm">
@@ -131,7 +133,7 @@ export const WithdrawForm = props => {
               label: <FormattedMessage id="INSTANT" />,
             },
           ]}
-        />
+        /> */}
 
         <TextInputGroup
           id="withdrawAmount"
@@ -234,7 +236,7 @@ export const WithdrawForm = props => {
           </>
         )}
 
-        {!overBalance && timelockDurationSeconds && withdrawType !== 'instant' && (
+        {/* {!overBalance && timelockDurationSeconds && withdrawType !== 'instant' && (
           <>
             <div className="text-yellow-1">
               <FormattedMessage id="YOU_WILL_RECEIVE" />{' '}
@@ -256,7 +258,7 @@ export const WithdrawForm = props => {
               )}
             </div>
           </>
-        )}
+        )} */}
 
         <div className="my-5">
           <Button disabled={overBalance || loading} color="warning" size="lg">

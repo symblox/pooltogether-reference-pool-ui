@@ -40,7 +40,7 @@ export const PrizeCard = props => {
           >
             <FormattedMessage id="DEPOSIT_TO_WIN" />
           </Button>
-          <div className="flex justify-between mt-4">
+          {/* <div className="flex justify-between mt-4">
             <InternalLink
               href={`/pools/[networkName]/[prizePoolAddress]/manage`}
               as={`/pools/${networkName}/${prizePoolAddress}/manage`}
@@ -63,7 +63,7 @@ export const PrizeCard = props => {
                 className={'ml-3 my-auto w-4 h-4 stroke-2 stroke-current'}
               />
             </InternalLink>
-          </div>
+          </div> */}
         </div>
       )}
     </Card>
