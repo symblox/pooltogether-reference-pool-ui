@@ -225,7 +225,7 @@ export const WithdrawForm = props => {
                     maxWithdrawable: displayAmountInEther(maxWithdrawable, {
                       decimals: tokenDecimals,
                     }),
-                    stakingEpochDuration: stakingEpochDuration * 5,
+                    stakingEpochDuration,
                   }}
                 />
               ) : (
