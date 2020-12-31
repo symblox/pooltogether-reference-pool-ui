@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ethers } from 'ethers'
 import { useAtom } from 'jotai'
 import { FormattedMessage } from 'react-intl'
@@ -10,15 +10,27 @@ import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { numberWithCommas } from 'lib/utils/numberWithCommas'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
 import { userChainValuesAtom } from 'lib/hooks/useUserChainValues'
+import { networkAtom } from 'lib/hooks/useNetwork'
+import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
+import { fetchWithdrawableAmount } from 'lib/utils/fetchWithdrawableAmount'
+
 import { InnerCard } from 'lib/components/Card'
 
 import Warning from 'assets/images/warning.svg'
 
 export const WithdrawForm = props => {
   const { exitFees, handleSubmit, vars, stateSetters, loading } = props
+  const [maxWithdrawable, setMaxWithdrawable] = useState(
+    ethers.utils.bigNumberify(0),
+  )
+  const [stakingEpochDuration, setStakingEpochDuration] = useState(0)
 
+  const [network] = useAtom(networkAtom)
+  const [poolAddresses] = useAtom(poolAddressesAtom)
   const [poolChainValues] = useAtom(poolChainValuesAtom)
   const [usersChainValues] = useAtom(userChainValuesAtom)
+
+  const { token } = poolAddresses
 
   const { usersTicketBalance } = usersChainValues || {}
 
@@ -69,6 +81,14 @@ export const WithdrawForm = props => {
   const ticketBal = ethers.utils.formatUnits(usersTicketBalance, tokenDecimals)
 
   const timelockCredit = '?'
+
+  const getWithdrawableAmount = async () => {
+    if (network && token) {
+      const res = await fetchWithdrawableAmount(network.name, token)
+      setMaxWithdrawable(res.withdrawable)
+      setStakingEpochDuration(res.stakingEpochDuration)
+    }
+  }
 
   if (poolIsLocked) {
     return (
@@ -143,7 +163,10 @@ export const WithdrawForm = props => {
           type="number"
           pattern="\d+"
           unit={tokenSymbol}
-          onChange={e => setWithdrawAmount(e.target.value)}
+          onChange={e => {
+            setWithdrawAmount(e.target.value)
+            getWithdrawableAmount()
+          }}
           value={withdrawAmount}
           rightLabel={
             tokenSymbol && (
@@ -182,7 +205,6 @@ export const WithdrawForm = props => {
             </div>
           </>
         )}
-
         {!overBalance && exitFee && withdrawType === 'instant' && (
           <>
             {/* <TextInputGroup
@@ -198,16 +220,32 @@ export const WithdrawForm = props => {
         />
  */}
             <div className="text-yellow-1">
-              <FormattedMessage id="YOU_WILL_RECEIVE" />{' '}
-              {displayAmountInEther(instantTotal, { decimals: tokenDecimals })}{' '}
-              {tokenSymbol} &nbsp;
+              {maxWithdrawable.lt(instantTotal) ? (
+                <FormattedMessage
+                  id="WITHDRAWABLE_TIP"
+                  values={{
+                    maxWithdrawable: displayAmountInEther(maxWithdrawable, {
+                      decimals: tokenDecimals,
+                    }),
+                    stakingEpochDuration,
+                  }}
+                />
+              ) : (
+                <>
+                  <FormattedMessage id="YOU_WILL_RECEIVE" />{' '}
+                  {displayAmountInEther(instantTotal, {
+                    decimals: tokenDecimals,
+                  })}{' '}
+                  {tokenSymbol} &nbsp;
+                </>
+              )}
               {exitFee.eq(0) ? (
                 <>
-                  <FormattedMessage id="NOW_AND_BURN" />{' '}
+                  {/* <FormattedMessage id="NOW_AND_BURN" />{' '}
                   {displayAmountInEther(burnedCredit, {
                     decimals: tokenDecimals,
                   })}{' '}
-                  <FormattedMessage id="FROM_YOUR_CREDIT" />
+                  <FormattedMessage id="FROM_YOUR_CREDIT" /> */}
                 </>
               ) : (
                 <>
