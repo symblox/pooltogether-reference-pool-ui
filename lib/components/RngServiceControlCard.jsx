@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
-import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizeStrategy'
+import PrizeStrategyAbi from '@symblox/pvlx-contracts/abis/PeriodicPrizeStrategy'
 
 import { Button } from 'lib/components/Button'
 import { Card, CardSecondaryText } from 'lib/components/Card'
@@ -21,13 +21,13 @@ const handleSetRngService = async (
   setTx,
   provider,
   prizeStrategyAddress,
-  rngServiceAddress
+  rngServiceAddress,
 ) => {
   const params = [
     rngServiceAddress,
     {
-      gasLimit: 200000
-    }
+      gasLimit: 200000,
+    },
   ]
 
   await sendTx(
@@ -37,17 +37,17 @@ const handleSetRngService = async (
     PrizeStrategyAbi,
     'setRngService',
     params,
-    txName
+    txName,
   )
 }
 
-export const RngServiceControlCard = (props) => {
+export const RngServiceControlCard = props => {
   return (
     <Card>
-      <Collapse title='Random Number Generator (RNG) Service'>
-        <CardSecondaryText className='mb-8'>
-          Choose the source of randomness the prize pool will use. This can be changed after pool
-          creation.
+      <Collapse title="Random Number Generator (RNG) Service">
+        <CardSecondaryText className="mb-8">
+          Choose the source of randomness the prize pool will use. This can be
+          changed after pool creation.
         </CardSecondaryText>
 
         <RngServiceControlForm />
@@ -56,7 +56,7 @@ export const RngServiceControlCard = (props) => {
   )
 }
 
-const RngServiceControlForm = (props) => {
+const RngServiceControlForm = props => {
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
   const [network] = useAtom(networkAtom)
@@ -65,9 +65,12 @@ const RngServiceControlForm = (props) => {
   const walletContext = useContext(WalletContext)
   const provider = walletContext.state.provider
 
-  const rngServicesList = Object.keys(CONTRACT_ADDRESSES[network.id].RNG_SERVICE)
+  const rngServicesList = Object.keys(
+    CONTRACT_ADDRESSES[network.id].RNG_SERVICE,
+  )
   const currentRngService = rngServicesList.find(
-    (service) => CONTRACT_ADDRESSES[network.id].RNG_SERVICE[service] === poolAddresses.rng
+    service =>
+      CONTRACT_ADDRESSES[network.id].RNG_SERVICE[service] === poolAddresses.rng,
   )
   const [newRngService, setNewRngService] = useState(currentRngService)
 
@@ -79,30 +82,30 @@ const RngServiceControlForm = (props) => {
   const rngServices = {
     blockhash: {
       value: 'blockhash',
-      view: 'Blockhash'
+      view: 'Blockhash',
     },
     chainlink: {
       value: 'chainlink',
-      view: 'Chainlink'
-    }
+      view: 'Chainlink',
+    },
   }
 
-  const formatValue = (key) => rngServices[key].view
+  const formatValue = key => rngServices[key].view
 
-  const onValueSet = (newRngService) => {
+  const onValueSet = newRngService => {
     setNewRngService(newRngService)
   }
 
   const txName = 'Set RNG Service'
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault()
     handleSetRngService(
       txName,
       setTx,
       provider,
       poolAddresses.prizeStrategy,
-      CONTRACT_ADDRESSES[network.id].RNG_SERVICE[newRngService]
+      CONTRACT_ADDRESSES[network.id].RNG_SERVICE[newRngService],
     )
   }
 
@@ -111,12 +114,12 @@ const RngServiceControlForm = (props) => {
     if (tx.completed && !tx.error) {
       setPoolAddresses({
         ...poolAddresses,
-        rng: CONTRACT_ADDRESSES[network.id].RNG_SERVICE[newRngService]
+        rng: CONTRACT_ADDRESSES[network.id].RNG_SERVICE[newRngService],
       })
     }
   }, [tx.completed, tx.error])
 
-  const resetState = (e) => {
+  const resetState = e => {
     e.preventDefault()
     setTx({})
   }
@@ -132,16 +135,16 @@ const RngServiceControlForm = (props) => {
   return (
     <form onSubmit={handleSubmit}>
       <DropdownInputGroup
-        id='rng-dropdown'
-        placeHolder='Select a random number generator service'
+        id="rng-dropdown"
+        placeHolder="Select a random number generator service"
         label={'Random number generator service'}
-        containerClassName='mb-8 w-full'
+        containerClassName="mb-8 w-full"
         formatValue={formatValue}
         onValueSet={onValueSet}
         current={currentRngService}
         values={rngServices}
       />
-      <Button color='secondary' size='lg'>
+      <Button color="secondary" size="lg">
         Update RNG service
       </Button>
     </form>

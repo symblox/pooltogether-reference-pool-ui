@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
-import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/MultipleWinners'
+import PrizeStrategyAbi from '@symblox/pvlx-contracts/abis/MultipleWinners'
 
 import { Button } from 'lib/components/Button'
 import { Card, CardSecondaryText } from 'lib/components/Card'
@@ -20,13 +20,13 @@ const handleSetNumberOfWinners = async (
   setTx,
   provider,
   prizeStrategyAddress,
-  numOfWinners
+  numOfWinners,
 ) => {
   const params = [
     numOfWinners,
     {
-      gasLimit: 200000
-    }
+      gasLimit: 200000,
+    },
   ]
 
   await sendTx(
@@ -36,20 +36,20 @@ const handleSetNumberOfWinners = async (
     PrizeStrategyAbi,
     'setNumberOfWinners',
     params,
-    txName
+    txName,
   )
 }
 
-export const NumOfWinnersControlCard = (props) => {
+export const NumOfWinnersControlCard = props => {
   const [contractVersions] = useAtom(contractVersionsAtom)
 
   if (contractVersions.prizeStrategy.contract === 'SingleRandomWinner') {
     return (
       <Card>
-        <Collapse title='Number of winners'>
-          <CardSecondaryText className='mb-4'>
-            A single random winner Prize Strategy was selected for this Prize Pool. There will be 1
-            winner for the entire prize .
+        <Collapse title="Number of winners">
+          <CardSecondaryText className="mb-4">
+            A single random winner Prize Strategy was selected for this Prize
+            Pool. There will be 1 winner for the entire prize .
           </CardSecondaryText>
         </Collapse>
       </Card>
@@ -58,8 +58,8 @@ export const NumOfWinnersControlCard = (props) => {
 
   return (
     <Card>
-      <Collapse title='Number of winners'>
-        <CardSecondaryText className='mb-8'>
+      <Collapse title="Number of winners">
+        <CardSecondaryText className="mb-8">
           Alter the number of winners to split the prize between.
         </CardSecondaryText>
         <NumOfWinnersForm />
@@ -68,7 +68,7 @@ export const NumOfWinnersControlCard = (props) => {
   )
 }
 
-const NumOfWinnersForm = (props) => {
+const NumOfWinnersForm = props => {
   const [poolAddresses, setPoolAddresses] = useAtom(poolAddressesAtom)
   const [poolChainValues, setPoolChainValues] = useAtom(poolChainValuesAtom)
   const [usersAddress] = useAtom(usersAddressAtom)
@@ -87,9 +87,15 @@ const NumOfWinnersForm = (props) => {
 
   const txName = 'Set Number of winners'
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault()
-    handleSetNumberOfWinners(txName, setTx, provider, poolAddresses.prizeStrategy, newNumOfWinners)
+    handleSetNumberOfWinners(
+      txName,
+      setTx,
+      provider,
+      poolAddresses.prizeStrategy,
+      newNumOfWinners,
+    )
   }
 
   // Update local data upon completion
@@ -97,12 +103,12 @@ const NumOfWinnersForm = (props) => {
     if (tx.completed && !tx.error) {
       setPoolChainValues({
         ...poolChainValues,
-        numberOfWinners: newNumOfWinners
+        numberOfWinners: newNumOfWinners,
       })
     }
   }, [tx.completed, tx.error])
 
-  const resetState = (e) => {
+  const resetState = e => {
     e.preventDefault()
 
     setNewNumOfWinners(currentNumOfWinners)
@@ -120,17 +126,17 @@ const NumOfWinnersForm = (props) => {
   return (
     <form onSubmit={handleSubmit}>
       <TextInputGroup
-        id='newNumOfWinners'
-        name='newNumOfWinners'
-        label='Number of winners'
-        containerClassName='mb-8'
-        placeholder='(eg. 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984)'
-        onChange={(e) => {
+        id="newNumOfWinners"
+        name="newNumOfWinners"
+        label="Number of winners"
+        containerClassName="mb-8"
+        placeholder="(eg. 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984)"
+        onChange={e => {
           setNewNumOfWinners(e.target.value)
         }}
         value={newNumOfWinners}
       />
-      <Button color='secondary' size='lg'>
+      <Button color="secondary" size="lg">
         Update winners
       </Button>
     </form>

@@ -16,7 +16,7 @@ export const RelatedAddressesCard = props => {
         address: poolAddresses.prizePool,
       },
       {
-        contract: 'Ticket',
+        contract: 'pVLX (Ticket)',
         address: poolAddresses.ticket,
       },
       {
@@ -28,7 +28,7 @@ export const RelatedAddressesCard = props => {
         address: poolAddresses.prizeStrategy,
       },
       {
-        contract: 'ERC20 Token (Underlying)',
+        contract: 'sVLX (Underlying)',
         address: poolAddresses.token,
       },
       {

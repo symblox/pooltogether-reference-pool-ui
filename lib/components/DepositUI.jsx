@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
+import SyxPrizePoolAbi from '@symblox/pvlx-contracts/abis/SyxPrizePool'
 import { ethers } from 'ethers'
 import { FormattedMessage } from 'react-intl'
 import { DepositForm } from 'lib/components/DepositForm'
@@ -39,40 +39,11 @@ const handleDepositSubmit = async (
     },
   ]
 
-  CompoundPrizePoolAbi.push({
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: 'controlledToken',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: 'referrer',
-        type: 'address',
-      },
-    ],
-    name: 'depositVlxTo',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  })
-
   await sendTx(
     setTx,
     provider,
     contractAddress,
-    CompoundPrizePoolAbi,
+    SyxPrizePoolAbi,
     'depositVlxTo',
     params,
     'Deposit',

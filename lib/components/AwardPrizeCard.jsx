@@ -1,13 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
-import PrizeStrategyAbi from '@pooltogether/pooltogether-contracts/abis/PeriodicPrizeStrategy'
+import PrizeStrategyAbi from '@symblox/pvlx-contracts/abis/PeriodicPrizeStrategy'
 
 import { sendTx } from 'lib/utils/sendTx'
-import { fetchPoolChainValues, poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import {
+  fetchPoolChainValues,
+  poolChainValuesAtom,
+} from 'lib/hooks/usePoolChainValues'
 import { useAtom } from 'jotai'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { useTimeLeft } from 'lib/hooks/useTimeLeft'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
-import { contractVersionsAtom, prizePoolTypeAtom } from 'lib/hooks/useDetermineContractVersions'
+import {
+  contractVersionsAtom,
+  prizePoolTypeAtom,
+} from 'lib/hooks/useDetermineContractVersions'
 import { errorStateAtom } from 'lib/components/PoolData'
 import { Card, CardSecondaryText } from 'lib/components/Card'
 import { Collapse } from 'lib/components/Collapse'
@@ -18,8 +24,8 @@ import { LoadingDots } from 'lib/components/LoadingDots'
 const handleStartAwardSubmit = async (setTx, provider, contractAddress) => {
   const params = [
     {
-      gasLimit: 300000
-    }
+      gasLimit: 300000,
+    },
   ]
 
   await sendTx(
@@ -29,15 +35,15 @@ const handleStartAwardSubmit = async (setTx, provider, contractAddress) => {
     PrizeStrategyAbi,
     'startAward',
     params,
-    'Start Award'
+    'Start Award',
   )
 }
 
 const handleCompleteAwardSubmit = async (setTx, provider, contractAddress) => {
   const params = [
     {
-      gasLimit: 700000
-    }
+      gasLimit: 700000,
+    },
   ]
 
   await sendTx(
@@ -47,14 +53,14 @@ const handleCompleteAwardSubmit = async (setTx, provider, contractAddress) => {
     PrizeStrategyAbi,
     'completeAward',
     params,
-    'Complete Award'
+    'Complete Award',
   )
 }
 
 export const AwardPrizeCard = () => {
   return (
     <Card>
-      <Collapse title='Award Prize'>
+      <Collapse title="Award Prize">
         <AwardPrizeTrigger />
       </Collapse>
     </Card>
@@ -77,18 +83,18 @@ const AwardPrizeTrigger = () => {
   const { canCompleteAward, canStartAward, isRngRequested } = poolChainValues
   const txInFlight = tx.inWallet || (tx.sent && !tx.completed)
 
-  const resetState = (e) => {
+  const resetState = e => {
     e.preventDefault()
     setTx({})
   }
 
-  const handleStartAwardClick = (e) => {
+  const handleStartAwardClick = e => {
     e.preventDefault()
     setTxType('Start Award')
     handleStartAwardSubmit(setTx, provider, poolAddresses.prizeStrategy)
   }
 
-  const handleCompleteAwardClick = (e) => {
+  const handleCompleteAwardClick = e => {
     e.preventDefault()
     setTxType('Complete Award')
     handleCompleteAwardSubmit(setTx, provider, poolAddresses.prizeStrategy)
@@ -103,7 +109,7 @@ const AwardPrizeTrigger = () => {
         prizePoolType,
         setPoolChainValues,
         contractVersions.prizeStrategy.contract,
-        setErrorState
+        setErrorState,
       )
     }
   }, [timeRemaining, tx.completed])
@@ -111,25 +117,30 @@ const AwardPrizeTrigger = () => {
   if (txInFlight) {
     return (
       <>
-        <TxMessage txType={txType} tx={tx} handleReset={resetState} resetButtonText='Hide this' />
-        <div className='flex mt-4'>
+        <TxMessage
+          txType={txType}
+          tx={tx}
+          handleReset={resetState}
+          resetButtonText="Hide this"
+        />
+        <div className="flex mt-4">
           <Button
-            type='button'
+            type="button"
             disabled={true}
-            color='secondary'
-            size='lg'
+            color="secondary"
+            size="lg"
             fullWidth
-            className='mr-4'
+            className="mr-4"
           >
             Start award
           </Button>
           <Button
-            type='button'
+            type="button"
             disabled={true}
-            color='secondary'
-            size='lg'
+            color="secondary"
+            size="lg"
             fullWidth
-            className='ml-4'
+            className="ml-4"
           >
             Complete award
           </Button>
@@ -141,29 +152,36 @@ const AwardPrizeTrigger = () => {
   return (
     <>
       {timeRemaining && (
-        <TimeDisplay days={days} hours={hours} minutes={minutes} seconds={seconds} />
+        <TimeDisplay
+          days={days}
+          hours={hours}
+          minutes={minutes}
+          seconds={seconds}
+        />
       )}
-      {isRngRequested && !canCompleteAward && <span>Pool is locked. Awarding in progress!</span>}
-      <div className='flex mt-4'>
+      {isRngRequested && !canCompleteAward && (
+        <span>Pool is locked. Awarding in progress!</span>
+      )}
+      <div className="flex mt-4">
         <Button
-          type='button'
+          type="button"
           disabled={!canStartAward || timeRemaining}
           onClick={handleStartAwardClick}
-          color='secondary'
-          size='lg'
+          color="secondary"
+          size="lg"
           fullWidth
-          className='mr-4'
+          className="mr-4"
         >
           Start award
         </Button>
         <Button
-          type='button'
+          type="button"
           disabled={!canCompleteAward}
           onClick={handleCompleteAwardClick}
-          color='secondary'
-          size='lg'
+          color="secondary"
+          size="lg"
           fullWidth
-          className='ml-4'
+          className="ml-4"
         >
           Complete award
         </Button>
@@ -183,7 +201,8 @@ const TimeDisplay = ({ days, hours, minutes, seconds }) => {
     } else {
       return (
         <span>
-          {days} day{days === 1 ? '' : 's'} {minutes} minute{minutes === 1 ? '' : 's'}
+          {days} day{days === 1 ? '' : 's'} {minutes} minute
+          {minutes === 1 ? '' : 's'}
         </span>
       )
     }

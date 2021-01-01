@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
-import IERC20Abi from '@pooltogether/pooltogether-contracts/abis/IERC20Upgradeable'
+import IERC20Abi from '@symblox/pvlx-contracts/abis/IERC20Upgradeable'
 import { useAtom } from 'jotai'
 import FeatherIcon from 'feather-icons-react'
 import { FormattedMessage } from 'react-intl'

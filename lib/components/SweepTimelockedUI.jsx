@@ -1,18 +1,23 @@
 import React, { useContext, useState } from 'react'
 
-import CompoundPrizePoolAbi from '@pooltogether/pooltogether-contracts/abis/CompoundPrizePool'
+import CompoundPrizePoolAbi from '@symblox/pvlx-contractsabis/CompoundPrizePool'
 
 import { SweepTimelockedForm } from 'lib/components/SweepTimelockedForm'
 import { TxMessage } from 'lib/components/TxMessage'
 import { WalletContext } from 'lib/components/WalletContextProvider'
 import { sendTx } from 'lib/utils/sendTx'
 
-const handleSweepTimelockedSubmit = async (setTx, provider, contractAddress, usersAddress) => {
+const handleSweepTimelockedSubmit = async (
+  setTx,
+  provider,
+  contractAddress,
+  usersAddress,
+) => {
   const params = [
     [usersAddress],
     {
-      gasLimit: 700000
-    }
+      gasLimit: 700000,
+    },
   ]
 
   await sendTx(
@@ -22,11 +27,11 @@ const handleSweepTimelockedSubmit = async (setTx, provider, contractAddress, use
     CompoundPrizePoolAbi,
     'sweepTimelockBalances',
     params,
-    'Sweep Timelocked Funds'
+    'Sweep Timelocked Funds',
   )
 }
 
-export const SweepTimelockedUI = (props) => {
+export const SweepTimelockedUI = props => {
   const { usersChainValues } = props
 
   const walletContext = useContext(WalletContext)
@@ -36,15 +41,17 @@ export const SweepTimelockedUI = (props) => {
   const [tx, setTx] = useState({
     inWallet: false,
     sent: false,
-    completed: false
+    completed: false,
   })
 
-  const { usersTimelockBalance, usersTimelockBalanceAvailableAt } = usersChainValues || {}
+  const { usersTimelockBalance, usersTimelockBalanceAvailableAt } =
+    usersChainValues || {}
 
-  const userHasTimelockedFunds = usersTimelockBalance && usersTimelockBalance.gt(0)
+  const userHasTimelockedFunds =
+    usersTimelockBalance && usersTimelockBalance.gt(0)
   const txInFlight = tx.inWallet || tx.sent
 
-  const resetState = (e) => {
+  const resetState = e => {
     e.preventDefault()
     setTx({})
   }
@@ -57,22 +64,29 @@ export const SweepTimelockedUI = (props) => {
             {...props}
             hasFundsToSweep={!userHasTimelockedFunds}
             usersTimelockBalance={usersTimelockBalance}
-            usersTimelockBalanceAvailableAt={parseInt(usersTimelockBalanceAvailableAt, 10)}
-            handleSubmit={(e) => {
+            usersTimelockBalanceAvailableAt={parseInt(
+              usersTimelockBalanceAvailableAt,
+              10,
+            )}
+            handleSubmit={e => {
               e.preventDefault()
 
               handleSweepTimelockedSubmit(
                 setTx,
                 provider,
                 props.poolAddresses.prizePool,
-                usersAddress
+                usersAddress,
               )
             }}
           />
         </>
       ) : (
         <>
-          <TxMessage txType='Sweep Timelocked Funds' tx={tx} handleReset={resetState} />
+          <TxMessage
+            txType="Sweep Timelocked Funds"
+            tx={tx}
+            handleReset={resetState}
+          />
         </>
       )}
     </>
