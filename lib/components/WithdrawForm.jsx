@@ -256,7 +256,7 @@ export const WithdrawForm = props => {
               )}
             </div>
 
-            {exitFee.eq(0) && (
+            {/* {exitFee.eq(0) && (
               <>
                 <div className="text-sm text-default my-6">
                   <em className="text-white">
@@ -270,7 +270,7 @@ export const WithdrawForm = props => {
                   <FormattedMessage id="FAIRNESS_FEE_TIP3" />
                 </div>
               </>
-            )}
+            )} */}
           </>
         )}
 
