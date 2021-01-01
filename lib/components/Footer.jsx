@@ -79,7 +79,7 @@ export const Footer = () => {
           </div>
 */}
           <div className="mt-3 sm:mt-0 mb-2 sm:mb-0">
-            {/* <nav className="flex sm:justify-between w-full"> 
+            <nav className="flex sm:justify-between w-full">
               <select
                 className="select-lang"
                 name="lang"
@@ -94,6 +94,7 @@ export const Footer = () => {
                   EN
                 </option>
               </select>
+              {/* 
               <a
                 className="img-link inline-block trans mr-3 lg:mr-0 lg:ml-4 w-5 h-5 "
                 href={twitterHref}
@@ -156,8 +157,8 @@ export const Footer = () => {
                     top: 6,
                   }}
                 />
-              </a>
-            </nav>*/}
+              </a>*/}
+            </nav>
           </div>
         </div>
       </div>
