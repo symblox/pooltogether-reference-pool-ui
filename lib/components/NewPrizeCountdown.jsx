@@ -8,6 +8,7 @@ import { useInterval } from 'beautiful-react-hooks'
 import { subtractDates } from 'lib/utils/subtractDates'
 import { useAtom } from 'jotai'
 import { poolChainValuesAtom } from 'lib/hooks/usePoolChainValues'
+import { useTimeLeft } from 'lib/hooks/useTimeLeft'
 
 const ONE_SECOND = 1000
 
@@ -38,12 +39,13 @@ export const NewPrizeCountdown = props => {
     return null
   }
 
-  const currentDate = new Date(Date.now())
-  const futureDate = addSeconds(currentDate, secondsRemaining)
-  const { days, hours, minutes, seconds } = subtractDates(
-    futureDate,
-    currentDate,
-  )
+  // const currentDate = new Date(Date.now())
+  // const futureDate = addSeconds(currentDate, secondsRemaining)
+  // const { days, hours, minutes, seconds } = subtractDates(
+  //   futureDate,
+  //   currentDate,
+  // )
+  const { days, hours, minutes, seconds } = useTimeLeft()
 
   let msg
   if (poolChainValues?.isRngRequested) {
