@@ -31,7 +31,7 @@ export const IndexContent = props => {
   const walletContext = useContext(WalletContext)
   const walletNetwork = walletContext._onboard.getState().network
 
-  const [network, setNetwork] = useState('rinkeby')
+  const [network, setNetwork] = useState('vlxmain')
   const [contractAddress, setContractAddress] = useState('')
 
   const demoNetworkName = findKey(demoPools, { chainId: walletNetwork })
@@ -50,17 +50,25 @@ export const IndexContent = props => {
   }
 
   const networks = {
-    ropsten: {
-      value: 'ropsten',
-      view: 'Ropsten',
+    // ropsten: {
+    //   value: 'ropsten',
+    //   view: 'Ropsten',
+    // },
+    // rinkeby: {
+    //   value: 'rinkeby',
+    //   view: 'Rinkeby',
+    // },
+    // mainnet: {
+    //   value: 'mainnet',
+    //   view: 'Mainnet',
+    // },
+    vlxmain: {
+      value: 'vlxmain',
+      view: 'VELAS',
     },
-    rinkeby: {
-      value: 'rinkeby',
-      view: 'Rinkeby',
-    },
-    mainnet: {
-      value: 'mainnet',
-      view: 'Mainnet',
+    vlxtest: {
+      value: 'vlxtest',
+      view: 'VELAS Testnet',
     },
     local: {
       value: 'local',

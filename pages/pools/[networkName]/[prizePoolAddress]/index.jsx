@@ -12,12 +12,8 @@ export async function getStaticProps({
 // This function gets called at build time
 export async function getStaticPaths() {
   const paths = [
-    {
-      params: {
-        networkName: 'vlxtest',
-        prizePoolAddress: '0x52b1729d6A81C43D7a464A40eCEBd31337921d3f',
-      },
-    },
+    '/pools/vlxtest/0x52b1729d6A81C43D7a464A40eCEBd31337921d3f',
+    '/pools/vlxmain/0xD55AD67b44cfDd6C6443A6f0305187194F491325',
   ]
 
   // We'll pre-render only these paths at build time.

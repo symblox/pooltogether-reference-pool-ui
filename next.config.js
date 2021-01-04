@@ -16,7 +16,7 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/pools/vlxtest/0x52b1729d6A81C43D7a464A40eCEBd31337921d3f',
+        destination: '/pools/vlxmain/0xD55AD67b44cfDd6C6443A6f0305187194F491325',
         permanent: false,
       },
     ]
