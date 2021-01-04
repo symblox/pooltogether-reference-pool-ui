@@ -165,7 +165,7 @@ const AwardPrizeTrigger = () => {
       <div className="flex mt-4">
         <Button
           type="button"
-          disabled={!canStartAward || timeRemaining}
+          disabled={!canStartAward} //|| timeRemaining}
           onClick={handleStartAwardClick}
           color="secondary"
           size="lg"
