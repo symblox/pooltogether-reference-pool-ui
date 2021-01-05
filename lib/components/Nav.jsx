@@ -23,8 +23,8 @@ export const Nav = props => {
         <nav className="sm:px-8 lg:px-0 nav-min-height flex items-center h-full justify-between flex-wrap">
           <div className="w-2/5 lg:w-1/5 justify-start h-full flex items-center truncate">
             <Link
-              href="/pools/vlxtest/0x52b1729d6A81C43D7a464A40eCEBd31337921d3f"
-              as="/pools/vlxtest/0x52b1729d6A81C43D7a464A40eCEBd31337921d3f"
+              href="/pools/vlxmain/0xD55AD67b44cfDd6C6443A6f0305187194F491325"
+              as="/pools/vlxmain/0xD55AD67b44cfDd6C6443A6f0305187194F491325"
             >
               <a title={'Back to home'} className="border-0">
                 <img
