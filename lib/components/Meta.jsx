@@ -5,7 +5,7 @@ export const Meta = ({ title }) => {
   title = title ? `${title} - ${defaultTitle}` : defaultTitle
 
   const url = `https://symblox.io`
-  const description = `Deposit and withdraw to V3 Pools`
+  const description = `Deposit and withdraw to pVLX`
   const keywords = 'velas'
   const twitterHandle = '@symbloxdefi'
 
@@ -13,15 +13,21 @@ export const Meta = ({ title }) => {
     <>
       <Head>
         <title>{title}</title>
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-2W1PDE9N7M"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', 'G-2W1PDE9N7M');
-        </script>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-2W1PDE9N7M"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+        
+              gtag('config', 'G-2W1PDE9N7M');
+              `,
+          }}
+        />
         <meta
           name="viewport"
           content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"
