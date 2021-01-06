@@ -14,7 +14,7 @@ import { networkAtom } from 'lib/hooks/useNetwork'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { fetchWithdrawableAmount } from 'lib/utils/fetchWithdrawableAmount'
 
-import { InnerCard } from 'lib/components/Card'
+import { Card } from 'lib/components/Card'
 
 import Warning from 'assets/images/warning.svg'
 
@@ -24,6 +24,7 @@ export const WithdrawForm = props => {
     ethers.utils.bigNumberify(0),
   )
   const [stakingEpochDuration, setStakingEpochDuration] = useState(0)
+  const [showApplyCard, setShowApplyCard] = useState(false)
 
   const [network] = useAtom(networkAtom)
   const [poolAddresses] = useAtom(poolAddressesAtom)
@@ -82,6 +83,28 @@ export const WithdrawForm = props => {
 
   const timelockCredit = '?'
 
+  const submit = async () => {
+    // await getWithdrawableAmount()
+    if (
+      !overBalance &&
+      exitFee &&
+      withdrawType === 'instant' &&
+      maxWithdrawable.lt(instantTotal)
+    ) {
+      setShowApplyCard(true)
+    } else {
+      handleSubmit()
+    }
+  }
+
+  const handleReset = async () => {
+    setMaxWithdrawable(ethers.utils.bigNumberify(0))
+    setWithdrawAmount('')
+    setStakingEpochDuration(0)
+    overBalance = false
+    setShowApplyCard(false)
+  }
+
   const getWithdrawableAmount = async () => {
     if (network && token) {
       const res = await fetchWithdrawableAmount(network.name, token)
@@ -92,7 +115,7 @@ export const WithdrawForm = props => {
 
   if (poolIsLocked) {
     return (
-      <InnerCard className="text-center">
+      <Card className="text-center">
         <img src={Warning} className="w-10 sm:w-14 mx-auto mb-4" />
         <div className="text-accent-1 mb-4">
           This Prize Pool is unable to withdraw at this time.
@@ -101,7 +124,7 @@ export const WithdrawForm = props => {
           Withdraws can be made once the prize has been awarded.
         </div>
         <div className="text-accent-1">Check back soon!</div>
-      </InnerCard>
+      </Card>
     )
   }
 
@@ -113,197 +136,141 @@ export const WithdrawForm = props => {
     )
   }
 
+  if (
+    !overBalance &&
+    exitFee &&
+    withdrawType === 'instant' &&
+    maxWithdrawable.lt(instantTotal) &&
+    showApplyCard
+  ) {
+    return (
+      <Card className="text-center" style={{ width: 'auto' }}>
+        <img src={Warning} className="w-10 sm:w-14 mx-auto mb-4" />
+        <div
+          className="text-accent-1 mb-4"
+          style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
+        >
+          <FormattedMessage
+            id="WITHDRAWABLE_TIP"
+            values={{
+              maxWithdrawable: displayAmountInEther(maxWithdrawable, {
+                decimals: tokenDecimals,
+              }),
+              stakingEpochDuration,
+            }}
+          />
+        </div>
+        <Button
+          disabled={overBalance || loading}
+          color="warning"
+          size="sm"
+          onClick={handleSubmit}
+        >
+          <FormattedMessage id="WITHDRAW_APPLY" />
+        </Button>
+        {'   '}
+        <Button
+          size="sm"
+          className="mt-4 mx-auto"
+          color="secondary"
+          onClick={handleReset}
+        >
+          <FormattedMessage id="RESET_FORM" />
+        </Button>
+      </Card>
+    )
+  }
+
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        {/* <RadioInputGroup
-          label={
+      {/* <form> */}
+      <TextInputGroup
+        id="withdrawAmount"
+        name="withdrawAmount"
+        label={<FormattedMessage id="WITHDRAW_AMOUNTS" />}
+        required
+        type="number"
+        pattern="\d+"
+        unit={tokenSymbol}
+        onChange={e => {
+          getWithdrawableAmount()
+          setWithdrawAmount(e.target.value)
+        }}
+        value={withdrawAmount}
+        rightLabel={
+          tokenSymbol && (
             <>
-              <div className="text-sm">
-                <FormattedMessage id="WITHDRAW_TIP" />{' '}
-                <PTHint
-                  title={<FormattedMessage id="ON_FAIRNESS_FEES" />}
-                  tip={
-                    <>
-                      <div className="my-2 text-xs sm:text-sm">
-                        {<FormattedMessage id="FEES_TIP_TITLE" />}
-                      </div>
-                      <div className="my-2 text-xs sm:text-sm">
-                        {<FormattedMessage id="FEES_TIP_1" />}
-                      </div>
-                      <div className="my-2 text-xs sm:text-sm">
-                        {<FormattedMessage id="FEES_TIP_2" />}
-                      </div>
-                    </>
-                  }
-                />
-              </div>
+              <button
+                type="button"
+                onClick={e => {
+                  e.preventDefault()
+                  getWithdrawableAmount()
+                  setWithdrawAmount(ticketBal)
+                }}
+              >
+                {/* Balance:  */}
+                <FormattedMessage id="MAX" /> -{' '}
+                {numberWithCommas(ticketBal, { precision: 4 })} {tokenSymbol}
+              </button>
             </>
-          }
-          name="withdrawType"
-          onChange={handleWithdrawTypeChange}
-          value={withdrawType}
-          radios={[
-            {
-              value: 'scheduled',
-              label: <FormattedMessage id="SCHEDULED" />,
-            },
-            {
-              value: 'instant',
-              label: <FormattedMessage id="INSTANT" />,
-            },
-          ]}
-        /> */}
+          )
+        }
+      />
 
-        <TextInputGroup
-          id="withdrawAmount"
-          name="withdrawAmount"
-          label={<FormattedMessage id="WITHDRAW_AMOUNTS" />}
-          required
-          type="number"
-          pattern="\d+"
-          unit={tokenSymbol}
-          onChange={e => {
-            setWithdrawAmount(e.target.value)
-            getWithdrawableAmount()
-          }}
-          value={withdrawAmount}
-          rightLabel={
-            tokenSymbol && (
-              <>
-                <button
-                  type="button"
-                  onClick={e => {
-                    e.preventDefault()
-                    setWithdrawAmount(ticketBal)
-                  }}
-                >
-                  {/* Balance:  */}
-                  <FormattedMessage id="MAX" /> -{' '}
-                  {numberWithCommas(ticketBal, { precision: 4 })} {tokenSymbol}
-                </button>
-              </>
-            )
-          }
-        />
-
-        {overBalance && (
-          <>
-            <div className="text-yellow-1">
-              You only have{' '}
-              {displayAmountInEther(usersTicketBalance, {
-                decimals: tokenDecimals,
-              })}{' '}
-              tickets.
-              <br />
-              The maximum you can withdraw is{' '}
-              {displayAmountInEther(usersTicketBalance, {
-                precision: 2,
-                decimals: tokenDecimals,
-              })}{' '}
-              {tokenSymbol}.
-            </div>
-          </>
-        )}
-        {!overBalance && exitFee && withdrawType === 'instant' && (
-          <>
-            {/* <TextInputGroup
-          id='maxExitFee'
-          label={<>
-            Max Exit Fee <span className='text-default italic'> (in {tokenSymbol})</span>
-          </>}
-          required
-          type='number'
-          pattern='\d+'
-          onChange={(e) => setMaxExitFee(e.target.value)}
-          value={maxExitFee}
-        />
- */}
-            <div className="text-yellow-1">
-              {maxWithdrawable.lt(instantTotal) ? (
-                <FormattedMessage
-                  id="WITHDRAWABLE_TIP"
-                  values={{
-                    maxWithdrawable: displayAmountInEther(maxWithdrawable, {
-                      decimals: tokenDecimals,
-                    }),
-                    stakingEpochDuration,
-                  }}
-                />
-              ) : (
-                <>
-                  <FormattedMessage id="YOU_WILL_RECEIVE" />{' '}
-                  {displayAmountInEther(instantTotal, {
-                    decimals: tokenDecimals,
-                  })}{' '}
-                  {tokenSymbol} &nbsp;
-                </>
-              )}
-              {exitFee.eq(0) ? (
-                <>
-                  {/* <FormattedMessage id="NOW_AND_BURN" />{' '}
-                  {displayAmountInEther(burnedCredit, {
-                    decimals: tokenDecimals,
-                  })}{' '}
-                  <FormattedMessage id="FROM_YOUR_CREDIT" /> */}
-                </>
-              ) : (
-                <>
-                  <FormattedMessage id="AND_FORFEIT" />{' '}
-                  {displayAmountInEther(exitFee, { decimals: tokenDecimals })}{' '}
-                  {tokenSymbol} <FormattedMessage id="AS_INTEREST" />
-                </>
-              )}
-            </div>
-
-            {/* {exitFee.eq(0) && (
-              <>
-                <div className="text-sm text-default my-6">
-                  <em className="text-white">
-                    <FormattedMessage id="FAIRNESS_FEE_TIP" />
-                  </em>
-                  <br />
-                  <br />
-                  <FormattedMessage id="FAIRNESS_FEE_TIP2" />
-                  <br />
-                  <br />
-                  <FormattedMessage id="FAIRNESS_FEE_TIP3" />
-                </div>
-              </>
-            )} */}
-          </>
-        )}
-
-        {/* {!overBalance && timelockDurationSeconds && withdrawType !== 'instant' && (
-          <>
-            <div className="text-yellow-1">
+      {overBalance && (
+        <>
+          <div className="text-yellow-1">
+            You only have{' '}
+            {displayAmountInEther(usersTicketBalance, {
+              decimals: tokenDecimals,
+            })}{' '}
+            tickets.
+            <br />
+            The maximum you can withdraw is{' '}
+            {displayAmountInEther(usersTicketBalance, {
+              precision: 2,
+              decimals: tokenDecimals,
+            })}{' '}
+            {tokenSymbol}.
+          </div>
+        </>
+      )}
+      {!overBalance && exitFee && withdrawType === 'instant' && (
+        <>
+          <div className="text-yellow-1">
+            {/* <>
               <FormattedMessage id="YOU_WILL_RECEIVE" />{' '}
-              {displayAmountInEther(instantTotal, { decimals: tokenDecimals })}{' '}
-              {tokenSymbol}&nbsp;
-              {timelockDurationSeconds.eq(0) ? (
-                <>
-                  <FormattedMessage id="NOW_AND_BURN" /> {timelockCredit}{' '}
-                  {tokenSymbol} <FormattedMessage id="FROM_YOUR_CREDIT" />
-                </>
-              ) : (
-                <>
-                  <FormattedMessage id="IN" />{' '}
-                  {numberWithCommas(timelockDurationSeconds, {
-                    precision: 0,
-                  }).toString()}{' '}
-                  <FormattedMessage id="SECONDS" />
-                </>
-              )}
-            </div>
-          </>
-        )} */}
-
-        <div className="my-5">
-          <Button disabled={overBalance || loading} color="warning" size="lg">
-            <FormattedMessage id="WITHDRAW" />
-          </Button>
-        </div>
-      </form>
+              {displayAmountInEther(instantTotal, {
+                decimals: tokenDecimals,
+              })}{' '}
+              {tokenSymbol} &nbsp;
+            </> */}
+            {exitFee.eq(0) ? (
+              <></>
+            ) : (
+              <>
+                <FormattedMessage id="AND_FORFEIT" />{' '}
+                {displayAmountInEther(exitFee, { decimals: tokenDecimals })}{' '}
+                {tokenSymbol} <FormattedMessage id="AS_INTEREST" />
+              </>
+            )}
+          </div>
+        </>
+      )}
+      <div className="my-5">
+        <Button
+          disabled={overBalance || loading}
+          color="warning"
+          size="lg"
+          onClick={e => {
+            e.preventDefault()
+            submit()
+          }}
+        >
+          <FormattedMessage id="WITHDRAW" />
+        </Button>
+      </div>
+      {/* </form> */}
     </>
   )
 }

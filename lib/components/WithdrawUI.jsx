@@ -158,7 +158,7 @@ export const WithdrawUI = props => {
         loading={loading}
         exitFees={exitFees}
         handleSubmit={e => {
-          e.preventDefault()
+          //e.preventDefault()
 
           handleWithdrawSubmit(
             setTx,
