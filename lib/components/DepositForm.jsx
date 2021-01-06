@@ -102,7 +102,7 @@ export const DepositForm = props => {
                 }}
               >
                 {/* Balance:  */}
-                <FormattedMessage id="MAX" /> -{' '}
+                <FormattedMessage id="MAX" />{' '}
                 {numberWithCommas(tokenBal, { precision: 4 })} {tokenSymbol}
               </button>
             )

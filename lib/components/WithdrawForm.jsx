@@ -156,7 +156,7 @@ export const WithdrawForm = props => {
               maxWithdrawable: displayAmountInEther(maxWithdrawable, {
                 decimals: tokenDecimals,
               }),
-              stakingEpochDuration,
+              stakingEpochDuration: (stakingEpochDuration / 60).toFixed(2),
             }}
           />
         </div>
@@ -209,7 +209,7 @@ export const WithdrawForm = props => {
                 }}
               >
                 {/* Balance:  */}
-                <FormattedMessage id="MAX" /> -{' '}
+                <FormattedMessage id="MAX" />{' '}
                 {numberWithCommas(ticketBal, { precision: 4 })} {tokenSymbol}
               </button>
             </>
