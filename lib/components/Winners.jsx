@@ -9,13 +9,14 @@ import { networkAtom } from 'lib/hooks/useNetwork'
 import { useAtom } from 'jotai'
 import { TOKEN_NAMES } from 'lib/constants'
 import { RowDataCell, Table } from 'lib/components/Table'
+import { EtherscanAddressLink } from 'lib/components/EtherscanAddressLink'
 
 export const Winners = ({ className }) => {
   const [network] = useAtom(networkAtom)
   const [winnerList, setWinnerList] = useWinnerList()
 
   const rows = useMemo(() => {
-    return winnerList.map((data, index) => (
+    return winnerList.reverse().map((data, index) => (
       <Row
         key={index}
         index={index}
@@ -56,7 +57,13 @@ const Row = props => {
   return (
     <tr>
       <RowDataCell first className="font-bold">
-        {address}
+        <EtherscanAddressLink
+          size="xxs"
+          address={address}
+          className="text-accent-1"
+        >
+          {address}
+        </EtherscanAddressLink>
       </RowDataCell>
       <RowDataCell>
         {amount} {token}
