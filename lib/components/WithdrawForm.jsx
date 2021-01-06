@@ -176,6 +176,7 @@ export const WithdrawForm = props => {
                   onClick={e => {
                     e.preventDefault()
                     setWithdrawAmount(ticketBal)
+                    getWithdrawableAmount()
                   }}
                 >
                   {/* Balance:  */}
