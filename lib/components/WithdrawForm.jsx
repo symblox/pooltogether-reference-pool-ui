@@ -209,7 +209,7 @@ export const WithdrawForm = props => {
                 }}
               >
                 {/* Balance:  */}
-                <FormattedMessage id="MAX" /> -{' '}
+                <FormattedMessage id="MAX" />{' '}
                 {numberWithCommas(ticketBal, { precision: 4 })} {tokenSymbol}
               </button>
             </>
