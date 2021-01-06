@@ -6,11 +6,13 @@ import { FairnessControlsCard } from 'lib/components/FairnessControlsCard'
 import { NumOfWinnersControlCard } from 'lib/components/NumOfWinnersControlCard'
 import { RngServiceControlCard } from 'lib/components/RngServiceControlCard'
 import { AwardPrizeCard } from 'lib/components/AwardPrizeCard'
+import { ClaimRewardCard } from 'lib/components/ClaimRewardCard'
 
-export const AdminUI = (props) => {
+export const AdminUI = props => {
   return (
     <>
       <AwardPrizeCard />
+      <ClaimRewardCard />
       <Erc20AwardsControlCard />
       <Erc721AwardsControlCard />
       <RngServiceControlCard />
