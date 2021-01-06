@@ -14,7 +14,7 @@ import { networkAtom } from 'lib/hooks/useNetwork'
 import { poolAddressesAtom } from 'lib/hooks/usePoolAddresses'
 import { fetchWithdrawableAmount } from 'lib/utils/fetchWithdrawableAmount'
 
-import { InnerCard } from 'lib/components/Card'
+import { Card } from 'lib/components/Card'
 
 import Warning from 'assets/images/warning.svg'
 
@@ -115,7 +115,7 @@ export const WithdrawForm = props => {
 
   if (poolIsLocked) {
     return (
-      <InnerCard className="text-center">
+      <Card className="text-center">
         <img src={Warning} className="w-10 sm:w-14 mx-auto mb-4" />
         <div className="text-accent-1 mb-4">
           This Prize Pool is unable to withdraw at this time.
@@ -124,7 +124,7 @@ export const WithdrawForm = props => {
           Withdraws can be made once the prize has been awarded.
         </div>
         <div className="text-accent-1">Check back soon!</div>
-      </InnerCard>
+      </Card>
     )
   }
 
@@ -144,9 +144,12 @@ export const WithdrawForm = props => {
     showApplyCard
   ) {
     return (
-      <InnerCard className="text-center">
+      <Card className="text-center" style={{ width: 'auto' }}>
         <img src={Warning} className="w-10 sm:w-14 mx-auto mb-4" />
-        <div className="text-accent-1 mb-4">
+        <div
+          className="text-accent-1 mb-4"
+          style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
+        >
           <FormattedMessage
             id="WITHDRAWABLE_TIP"
             values={{
@@ -165,6 +168,7 @@ export const WithdrawForm = props => {
         >
           <FormattedMessage id="WITHDRAW_APPLY" />
         </Button>
+        {'   '}
         <Button
           size="sm"
           className="mt-4 mx-auto"
@@ -173,7 +177,7 @@ export const WithdrawForm = props => {
         >
           <FormattedMessage id="RESET_FORM" />
         </Button>
-      </InnerCard>
+      </Card>
     )
   }
 
