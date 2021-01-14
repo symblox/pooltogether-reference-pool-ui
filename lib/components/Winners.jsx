@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react'
 import classnames from 'classnames'
 import { useWinnerList } from 'lib/hooks/useWinnerList'
-import { Card, CardPrimaryText, CardTitle } from 'lib/components/Card'
+import { Card } from 'lib/components/Card'
+import { Collapse } from 'lib/components/Collapse'
 import { FormattedMessage } from 'react-intl'
 import { displayAmountInEther } from 'lib/utils/displayAmountInEther'
 import { ethToVlx } from 'lib/utils/vlxAddressConversion'
@@ -34,31 +35,28 @@ export const Winners = ({ className }) => {
         if (strDate >= 0 && strDate <= 9) {
           strDate = '0' + strDate
         }
-
-        return (
-          <Row
-            key={index}
-            index={index}
-            address={ethToVlx(data.values.winner)}
-            amount={displayAmountInEther(data.values.amount, {
-              precision: 4,
-              decimals: 18,
-            })}
-            token={TOKEN_NAMES[network.id][data.values.token]}
-            date={
-              date.getFullYear() + seperator + nowMonth + seperator + strDate
-            }
-          />
-        )
+        if (index < 10)
+          return (
+            <Row
+              key={index}
+              index={index}
+              address={ethToVlx(data.values.winner)}
+              amount={displayAmountInEther(data.values.amount, {
+                precision: 4,
+                decimals: 18,
+              })}
+              token={TOKEN_NAMES[network.id][data.values.token]}
+              date={
+                date.getFullYear() + seperator + nowMonth + seperator + strDate
+              }
+            />
+          )
       })
   }, [winnerList])
 
   return (
     <Card className={classnames('flex flex-col mx-auto', className)}>
-      <CardTitle>
-        <FormattedMessage id="WINNER" />
-      </CardTitle>
-      <CardPrimaryText>
+      <Collapse title={<FormattedMessage id="WINNER" />}>
         <Table
           headers={[
             <FormattedMessage id="ADDRESS" />,
@@ -68,7 +66,7 @@ export const Winners = ({ className }) => {
           rows={rows}
           className="w-full"
         />
-      </CardPrimaryText>
+      </Collapse>
     </Card>
   )
 }
